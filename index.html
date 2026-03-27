@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicia Tu Mejor Versión - INFIT (México)</title>
+    <title>Inicia Tu Mejor Versión - INFIT Combo (México)</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -28,10 +28,13 @@
                 extend: {
                     colors: {
                         infit: {
-                            blue: '#0066FF',
+                            black: '#050505',
                             dark: '#0a0a0a',
                             gold: '#FFD700',
                             pink: '#ec4899',
+                            pinkdim: '#db2777',
+                            white: '#ffffff',
+                            gray: '#a3a3a3',
                             hidalgo: '#8B4513',
                             universal: '#10b981',
                         }
@@ -43,33 +46,28 @@
                     animation: {
                         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                         'float': 'float 6s ease-in-out infinite',
-                        'shimmer': 'shimmer 2s linear infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
                         'bounce-in': 'bounceIn 0.5s ease-out',
-                        'fade-in': 'fadeIn 0.3s ease-out',
-                        'scale-in': 'scaleIn 0.3s ease-out',
+                        'shimmer': 'shimmer 2s linear infinite',
                     },
                     keyframes: {
                         float: {
                             '0%, 100%': { transform: 'translateY(0)' },
                             '50%': { transform: 'translateY(-10px)' },
                         },
-                        shimmer: {
-                            '0%': { backgroundPosition: '-200% 0' },
-                            '100%': { backgroundPosition: '200% 0' },
+                        glow: {
+                            '0%': { boxShadow: '0 0 20px rgba(236, 72, 153, 0.2)' },
+                            '100%': { boxShadow: '0 0 40px rgba(236, 72, 153, 0.4)' },
                         },
                         bounceIn: {
                             '0%': { transform: 'scale(0.9)', opacity: '0' },
                             '50%': { transform: 'scale(1.02)' },
                             '100%': { transform: 'scale(1)', opacity: '1' },
                         },
-                        fadeIn: {
-                            '0%': { opacity: '0', transform: 'translateY(10px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        shimmer: {
+                            '0%': { backgroundPosition: '-200% 0' },
+                            '100%': { backgroundPosition: '200% 0' },
                         },
-                        scaleIn: {
-                            '0%': { transform: 'scale(0.95)', opacity: '0' },
-                            '100%': { transform: 'scale(1)', opacity: '1' },
-                        }
                     }
                 }
             }
@@ -89,12 +87,25 @@
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
         }
         .combo-card {
-            background: linear-gradient(180deg, rgba(236, 72, 153, 0.05) 0%, rgba(5, 5, 5, 1) 100%);
-            border: 1px solid #ec4899;
-            box-shadow: 0 0 30px rgba(236, 72, 153, 0.15);
+            background: linear-gradient(180deg, rgba(236, 72, 153, 0.08) 0%, rgba(5, 5, 5, 1) 100%);
+            border: 2px solid #ec4899;
+            box-shadow: 0 0 40px rgba(236, 72, 153, 0.15);
             transform: scale(1.02);
             position: relative;
             z-index: 10;
+        }
+        .combo-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #ec4899, #FFD700, #ec4899);
+            border-radius: 1rem;
+            z-index: -1;
+            opacity: 0.2;
+            animation: glow 2s ease-in-out infinite alternate;
         }
         .input-field {
             background: rgba(255, 255, 255, 0.05);
@@ -110,11 +121,15 @@
         .input-field::placeholder {
             color: rgba(255, 255, 255, 0.3);
         }
+        
+        /* Checkbox personalizado para días */
         .day-checkbox:checked + div {
             background-color: #ec4899;
             color: white;
             font-weight: bold;
         }
+        
+        /* Panel de Edición */
         #editor-panel {
             transform: translateX(100%);
             transition: transform 0.3s ease-in-out;
@@ -122,16 +137,20 @@
         #editor-panel.open {
             transform: translateX(0);
         }
+
+        /* Estilo para Optgroups en Selects */
         optgroup {
             background-color: #1a1a1a;
-            color: #ffffff;
+            color: #ec4899;
             font-style: normal;
             font-weight: bold;
         }
+
+        /* Ocultar elementos admin por defecto */
         .admin-only {
             display: none;
         }
-        
+
         /* Estilos para tarjetas de objetivo */
         .goal-card {
             transition: all 0.3s ease;
@@ -144,13 +163,13 @@
         .goal-radio:checked + .goal-card {
             border-color: #ec4899;
             background: rgba(236, 72, 153, 0.1);
-            box-shadow: 0 0 20px rgba(236, 72, 153, 0.2);
+            box-shadow: 0 0 15px rgba(236, 72, 153, 0.2);
         }
         .goal-radio:checked + .goal-card .goal-icon {
             transform: scale(1.1);
             color: #ec4899;
         }
-        
+
         /* NUEVO: Estilos para tarjetas de cocina */
         .cuisine-card {
             transition: all 0.3s ease;
@@ -191,7 +210,45 @@
         .cuisine-radio:checked + .cuisine-card .cuisine-icon {
             transform: scale(1.15) rotate(5deg);
         }
-        
+
+        /* Estilos para checkboxes de exclusión de alimentos */
+        .exclude-checkbox {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid #444;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        .exclude-checkbox:checked {
+            background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+            border-color: #ec4899;
+        }
+        .exclude-checkbox:checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .exclude-item {
+            transition: all 0.2s ease;
+        }
+        .exclude-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .exclude-item:has(.exclude-checkbox:checked) {
+            background: rgba(236, 72, 153, 0.1);
+            border-color: rgba(236, 72, 153, 0.3);
+        }
+
         /* Scrollbar personalizado */
         .custom-scrollbar::-webkit-scrollbar {
             width: 6px;
@@ -207,7 +264,7 @@
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
             background: rgba(236, 72, 153, 0.7);
         }
-        
+
         /* Indicador de paso activo */
         .step-indicator {
             transition: all 0.3s ease;
@@ -219,49 +276,28 @@
         .step-indicator.completed {
             background-color: #22c55e;
         }
-        
-        /* Tooltip mejorado */
-        .tooltip {
-            position: relative;
-        }
-        .tooltip::after {
-            content: attr(data-tip);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #1a1a1a;
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 10px;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s;
-            border: 1px solid rgba(236, 72, 153, 0.3);
-            z-index: 10;
-        }
-        .tooltip:hover::after {
-            opacity: 1;
-        }
-        
-        /* MEJORA: Efecto de brillo en badges */
-        .badge-shimmer {
+
+        /* Efecto shimmer en badges */
+        .shimmer-badge {
             background: linear-gradient(90deg, #ec4899, #f472b6, #ec4899);
             background-size: 200% 100%;
             animation: shimmer 2s linear infinite;
+            color: white;
         }
-        
-        /* MEJORA: Contador de caracteres */
-        .char-counter {
-            transition: color 0.3s;
+
+        /* Plan cards */
+        .plan-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .char-counter.warning {
-            color: #f59e0b;
+        .plan-card:hover {
+            transform: translateY(-8px);
         }
-        .char-counter.danger {
-            color: #ef4444;
+        .check-icon {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.2) 0%, rgba(236, 72, 153, 0.1) 100%);
+            border: 1px solid rgba(236, 72, 153, 0.3);
+        }
+        .price-tag {
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
         }
     </style>
 </head>
@@ -276,12 +312,12 @@
     <div id="editor-panel" class="admin-only fixed top-0 right-0 h-full w-80 bg-[#111] border-l border-gray-800 z-[100] shadow-2xl p-6 overflow-y-auto custom-scrollbar">
         <div class="flex justify-between items-center mb-6">
             <h3 class="text-infit-pink font-heading font-bold uppercase">Editor de Contenido</h3>
-            <button onclick="toggleEditor()" class="text-gray-400 hover:text-white transition-colors"><i class="fas fa-times"></i></button>
+            <button onclick="toggleEditor()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
         </div>
         
         <div class="space-y-4 text-xs">
-            <div class="bg-red-900/20 p-2 rounded border border-red-500/30 mb-4">
-                <p class="text-red-200">🔒 <strong>Modo Administrador Activo</strong><br>Este panel no es visible para los clientes.</p>
+            <div class="bg-pink-900/20 p-2 rounded border border-pink-500/30 mb-4">
+                <p class="text-pink-200">🔒 <strong>Modo Administrador Activo</strong><br>Este panel no es visible para los clientes.</p>
             </div>
 
             <div>
@@ -319,9 +355,9 @@
             <div class="bg-infit-pink/10 p-3 rounded mt-6 border border-infit-pink/20">
                 <p class="text-[10px] text-gray-300 mb-2">
                     <i class="fas fa-info-circle text-infit-pink"></i> 
-                    Los cambios son solo visuales. Copia el código para guardarlos en GitHub.
+                    Los cambios son solo visuales. Copia el código para guardarlos permanentemente.
                 </p>
-                <button onclick="copyConfig()" class="w-full bg-infit-pink text-white font-bold py-2 rounded text-[10px] uppercase hover:bg-white hover:text-infit-pink transition-colors">
+                <button onclick="copyConfig()" class="w-full bg-infit-pink text-white font-bold py-2 rounded text-[10px] uppercase hover:bg-infit-pinkdim transition-colors">
                     Copiar Código de Configuración
                 </button>
             </div>
@@ -337,8 +373,14 @@
                     IN<span class="text-infit-gold">FIT</span> <span class="text-xs not-italic text-gray-500 ml-1">MX</span>
                 </h1>
             </div>
-            <div id="affiliate-badge" class="hidden text-[10px] text-gray-400 uppercase border border-gray-800 rounded-full px-3 py-1 bg-black/50">
-                Recomendada por: <span id="affiliate-name" class="text-white font-bold"></span>
+            <div class="flex items-center gap-3">
+                <div class="hidden md:flex items-center gap-2 text-[10px] text-gray-400 border border-gray-800 rounded-full px-3 py-1 bg-black/50">
+                    <span>🇲🇽</span>
+                    <span>Santa Ana Hueytlalpan, Hgo.</span>
+                </div>
+                <div id="affiliate-badge" class="hidden text-[10px] text-gray-500 uppercase border border-gray-800 rounded-full px-3 py-1 bg-black/50">
+                    Recomendada por: <span id="affiliate-name" class="text-infit-pink font-bold"></span>
+                </div>
             </div>
         </div>
     </nav>
@@ -347,10 +389,21 @@
     <header class="pt-32 pb-12 px-4 text-center max-w-4xl mx-auto relative">
         <div class="absolute top-20 left-1/2 transform -translate-x-1/2 w-64 h-64 bg-infit-pink opacity-5 blur-[100px] rounded-full pointer-events-none"></div>
         
+        <!-- Badge local -->
+        <div class="inline-flex items-center gap-2 bg-infit-pink/10 border border-infit-pink/30 rounded-full px-4 py-2 mb-6">
+            <span class="text-xl">🇲🇽</span>
+            <span class="text-white text-xs font-bold">Santa Ana Hueytlalpan, Hidalgo</span>
+        </div>
+        
         <h2 class="text-4xl md:text-6xl font-heading font-bold uppercase italic mb-4 animate-float">
             Bienvenida al inicio de<br>
             <span class="text-infit-pink text-glow">Tu Mejor Versión</span>
         </h2>
+        
+        <p class="text-gray-400 text-sm md:text-base mb-6 max-w-2xl mx-auto">
+            Tu plan de nutrición y entrenamiento personalizado, creado especialmente para ti 
+            <span class="text-infit-pink font-bold">con el sazón y estilo de nuestra tierra.</span>
+        </p>
         
         <div class="inline-block bg-infit-pink/10 border border-infit-pink/20 rounded-lg px-6 py-2 mb-8 animate-pulse-slow">
             <p class="text-infit-pink text-xs md:text-sm font-bold uppercase tracking-widest">
@@ -360,47 +413,58 @@
     </header>
 
     <!-- Pricing Plans Section -->
-    <main class="max-w-6xl mx-auto px-4 pb-24 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-start">
+    <main class="max-w-6xl mx-auto px-4 pb-12 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-start">
         
         <!-- Plan Nutrición -->
-        <div class="glass-panel rounded-2xl p-6 relative group hover:bg-white/5 transition-all duration-300 order-2 md:order-1">
+        <div class="plan-card glass-panel rounded-2xl p-6 relative group hover:bg-white/5 transition-all duration-300 order-2 md:order-1">
             <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-infit-dark border border-white/10 p-3 rounded-full shadow-[0_0_15px_rgba(255,255,255,0.05)]">
                 <i class="fas fa-leaf text-2xl text-infit-pink"></i>
             </div>
             <h3 class="mt-8 text-xl font-heading font-bold text-center text-white uppercase italic">Nutrición</h3>
             <div class="text-center my-4">
-                <span class="text-3xl font-bold text-infit-gold">$<span id="display-price-nutri">600</span></span>
+                <span class="text-3xl font-bold text-infit-gold price-tag">$<span id="display-price-nutri">350</span></span>
                 <span class="text-sm text-gray-500 uppercase">MXN / Mes</span>
             </div>
-            <button onclick="playVideo('nutri')" class="w-full mb-4 py-2 bg-black hover:bg-infit-pink/10 rounded text-xs text-infit-pink border border-infit-pink/30 transition-all flex items-center justify-center gap-2">
+            <!-- Botón Ver Video -->
+            <button onclick="playVideo('nutri')" class="w-full mb-4 py-2 bg-gray-800/50 hover:bg-infit-pink/10 rounded text-xs text-infit-pink border border-infit-pink/30 transition-all flex items-center justify-center gap-2">
                 <i class="fas fa-play-circle text-sm"></i> Ver Preview
             </button>
             <ul class="space-y-3 text-sm text-gray-400 mb-8">
-                <li class="flex items-start gap-2"><i class="fas fa-check text-infit-pink mt-1"></i> Plan 100% personalizado</li>
-                <li class="flex items-start gap-2"><i class="fas fa-check text-infit-pink mt-1"></i> Recetas ricas y prácticas</li>
-                <li class="flex items-start gap-2"><i class="fas fa-check text-infit-pink mt-1"></i> Enfoque en tus objetivos</li>
+                <li class="flex items-start gap-2">
+                    <div class="check-icon p-1 rounded text-infit-pink mt-0.5"><i class="fas fa-check text-xs"></i></div>
+                    <span>Plan 100% personalizado</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <div class="check-icon p-1 rounded text-infit-pink mt-0.5"><i class="fas fa-check text-xs"></i></div>
+                    <span>Eliminación alimentos dañinos</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <div class="check-icon p-1 rounded text-infit-pink mt-0.5"><i class="fas fa-check text-xs"></i></div>
+                    <span>Recetas prácticas</span>
+                </li>
             </ul>
-            <button onclick="selectPlan('Nutrición')" class="w-full py-3 rounded-lg border border-gray-600 hover:border-infit-pink hover:text-infit-pink transition-colors text-sm font-bold uppercase tracking-wider text-gray-300">
+            <button onclick="selectPlan('Nutrición')" class="w-full py-3 rounded-lg border border-gray-600 hover:border-infit-pink hover:text-infit-pink transition-colors text-sm font-bold uppercase tracking-wider">
                 Elegir Nutrición
             </button>
         </div>
 
         <!-- PLAN COMBO (DESTACADO) -->
-        <div class="combo-card rounded-2xl p-8 order-1 md:order-2">
-            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 badge-shimmer text-white font-bold px-4 py-1 rounded-full text-xs uppercase tracking-widest shadow-[0_0_15px_rgba(236,72,153,0.5)]">
-                Recomendado México 🇲🇽
+        <div class="combo-card rounded-2xl p-6 md:p-8 order-1 md:order-2">
+            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shimmer-badge font-bold px-5 py-1.5 rounded-full text-xs uppercase tracking-widest shadow-[0_0_20px_rgba(236,72,153,0.3)]">
+                ⭐ Más Vendido 🇲🇽
             </div>
-            <div class="text-center mb-6">
+            <div class="text-center mb-6 pt-4">
                 <i class="fas fa-fire text-4xl text-infit-pink mb-4 animate-pulse-slow"></i>
                 <h3 class="text-2xl font-heading font-bold text-white uppercase italic">Combo Total</h3>
-                <p class="text-[10px] text-gray-400 uppercase tracking-widest mt-1">La experiencia completa</p>
+                <p class="text-[10px] text-infit-gold uppercase tracking-widest mt-1">La experiencia completa</p>
             </div>
             <div class="text-center my-6 border-y border-infit-pink/20 py-4">
                 <div class="flex justify-center items-center gap-2">
-                    <span class="text-gray-600 line-through text-lg">$<span id="display-price-old">1800</span></span>
-                    <span class="text-5xl font-bold text-white">$<span id="display-price-combo">999</span></span>
+                    <span class="text-gray-500 line-through text-lg">$<span id="display-price-old">700</span></span>
+                    <span class="text-5xl font-bold text-white price-tag">$<span id="display-price-combo">550</span></span>
                 </div>
                 <span class="text-sm text-infit-gold font-bold">MXN / Mes</span>
+                <p class="text-[10px] text-gray-500 mt-1">Ahorras $150 vs. planes separados</p>
             </div>
             <ul class="space-y-4 text-sm text-gray-300 mb-8">
                 <li class="flex flex-col gap-1">
@@ -408,89 +472,169 @@
                         <div class="bg-infit-pink/20 p-1 rounded text-infit-pink"><i class="fas fa-dumbbell"></i></div>
                         <span class="font-bold text-white">Entrenamiento Digital</span>
                     </div>
-                    <button onclick="playVideo('entreno')" class="ml-9 text-[10px] text-infit-pink hover:text-white underline text-left w-fit transition-colors"><i class="fas fa-play text-[8px] mr-1"></i>Ver preview entrenamiento</button>
+                    <button onclick="playVideo('entreno')" class="ml-9 text-[10px] text-infit-pink/70 hover:text-infit-pink underline text-left w-fit"><i class="fas fa-play text-[8px] mr-1"></i>Ver preview entrenamiento</button>
                 </li>
                 <li class="flex flex-col gap-1">
                     <div class="flex items-start gap-3">
                         <div class="bg-infit-pink/20 p-1 rounded text-infit-pink"><i class="fas fa-utensils"></i></div>
                         <span class="font-bold text-white">Plan Nutricional Completo</span>
                     </div>
-                    <button onclick="playVideo('nutri')" class="ml-9 text-[10px] text-infit-pink hover:text-white underline text-left w-fit transition-colors"><i class="fas fa-play text-[8px] mr-1"></i>Ver preview nutrición</button>
+                    <button onclick="playVideo('nutri')" class="ml-9 text-[10px] text-infit-pink/70 hover:text-infit-pink underline text-left w-fit"><i class="fas fa-play text-[8px] mr-1"></i>Ver preview nutrición</button>
                 </li>
                 <li class="flex items-start gap-3">
                     <div class="bg-infit-pink/20 p-1 rounded text-infit-pink"><i class="fas fa-calendar-check"></i></div>
                     <span>Calendario del Poder + Eliminación alimentos dañinos</span>
                 </li>
             </ul>
-            <button onclick="selectPlan('Combo Total')" class="w-full bg-infit-pink hover:bg-white hover:text-infit-pink text-white font-bold py-4 rounded-lg uppercase tracking-widest transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(236,72,153,0.3)] active:scale-95">
-                ¡Lo Quiero Todo!
+            <button onclick="selectPlan('Combo Total')" class="w-full bg-gradient-to-r from-infit-pink to-infit-pinkdim hover:from-pink-400 hover:to-infit-pink text-white font-bold py-4 rounded-lg uppercase tracking-widest transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(236,72,153,0.3)]">
+                QUIERO MI MEJOR VERSIÓN
             </button>
-            <p class="text-[10px] text-center text-gray-500 mt-4 italic" id="display-combo-note">
-                *Pagas hasta que te entreguemos todo tu material.*
+            <p class="text-[10px] text-center text-gray-400 mt-4 italic" id="display-combo-note">
+                *La opción que genera mejores resultados estadísticamente.*
             </p>
         </div>
 
         <!-- Plan Entrenamiento -->
-        <div class="glass-panel rounded-2xl p-6 relative group hover:bg-white/5 transition-all duration-300 order-3">
-            <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-infit-dark border border-white/10 p-3 rounded-full">
+        <div class="plan-card glass-panel rounded-2xl p-6 relative group hover:bg-white/5 transition-all duration-300 order-3">
+            <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-infit-dark border border-white/10 p-3 rounded-full shadow-[0_0_15px_rgba(255,255,255,0.05)]">
                 <i class="fas fa-dumbbell text-2xl text-infit-pink"></i>
             </div>
             <h3 class="mt-8 text-xl font-heading font-bold text-center text-white uppercase italic">Entrenamiento</h3>
             <div class="text-center my-4">
-                <span class="text-3xl font-bold text-infit-gold">$<span id="display-price-train">600</span></span>
+                <span class="text-3xl font-bold text-infit-gold price-tag">$<span id="display-price-train">400</span></span>
                 <span class="text-sm text-gray-500 uppercase">MXN / Mes</span>
             </div>
-            <button onclick="playVideo('entreno')" class="w-full mb-4 py-2 bg-black hover:bg-infit-pink/10 rounded text-xs text-infit-pink border border-infit-pink/30 transition-all flex items-center justify-center gap-2">
+            <!-- Botón Ver Video -->
+            <button onclick="playVideo('entreno')" class="w-full mb-4 py-2 bg-gray-800/50 hover:bg-infit-pink/10 rounded text-xs text-infit-pink border border-infit-pink/30 transition-all flex items-center justify-center gap-2">
                 <i class="fas fa-play-circle text-sm"></i> Ver Preview
             </button>
             <ul class="space-y-3 text-sm text-gray-400 mb-8">
-                <li class="flex items-start gap-2"><i class="fas fa-check text-infit-pink mt-1"></i> Rutinas Gym o Casa</li>
-                <li class="flex items-start gap-2"><i class="fas fa-check text-infit-pink mt-1"></i> Videos demostrativos</li>
-                <li class="flex items-start gap-2"><i class="fas fa-check text-infit-pink mt-1"></i> Calendario de Poder</li>
+                <li class="flex items-start gap-2">
+                    <div class="check-icon p-1 rounded text-infit-pink mt-0.5"><i class="fas fa-check text-xs"></i></div>
+                    <span>Rutinas Gym o Casa</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <div class="check-icon p-1 rounded text-infit-pink mt-0.5"><i class="fas fa-check text-xs"></i></div>
+                    <span>Videos demostrativos</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <div class="check-icon p-1 rounded text-infit-pink mt-0.5"><i class="fas fa-check text-xs"></i></div>
+                    <span>Calendario de Poder</span>
+                </li>
             </ul>
-            <button onclick="selectPlan('Entrenamiento')" class="w-full py-3 rounded-lg border border-gray-600 hover:border-infit-pink hover:text-infit-pink transition-colors text-sm font-bold uppercase tracking-wider text-gray-300">
+            <button onclick="selectPlan('Entrenamiento')" class="w-full py-3 rounded-lg border border-gray-600 hover:border-infit-pink hover:text-infit-pink transition-colors text-sm font-bold uppercase tracking-wider">
                 Elegir Entrenamiento
             </button>
         </div>
 
     </main>
 
+    <!-- Beneficios Destacados -->
+    <section class="max-w-4xl mx-auto px-4 pb-12">
+        <div class="glass-panel rounded-2xl p-6 md:p-8">
+            <h3 class="text-xl font-heading font-bold text-center text-white uppercase italic mb-6">
+                <i class="fas fa-star text-infit-gold mr-2"></i> ¿Por qué elegir INFIT?
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="text-center group">
+                    <div class="bg-infit-pink/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 group-hover:bg-infit-pink/20 transition-all">
+                        <i class="fas fa-map-marker-alt text-2xl text-infit-pink"></i>
+                    </div>
+                    <h4 class="font-bold text-white mb-1">De Nuestra Tierra</h4>
+                    <p class="text-xs text-gray-500">Hecho en Santa Ana Hueytlalpan con el sazón que nos caracteriza</p>
+                </div>
+                <div class="text-center group">
+                    <div class="bg-infit-pink/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 group-hover:bg-infit-pink/20 transition-all">
+                        <i class="fas fa-shopping-cart text-2xl text-infit-pink"></i>
+                    </div>
+                    <h4 class="font-bold text-white mb-1">Ingredientes Accesibles</h4>
+                    <p class="text-xs text-gray-500">Recetas con productos del súper local o mercado de Tulancingo</p>
+                </div>
+                <div class="text-center group">
+                    <div class="bg-infit-pink/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 group-hover:bg-infit-pink/20 transition-all">
+                        <i class="fas fa-wallet text-2xl text-infit-pink"></i>
+                    </div>
+                    <h4 class="font-bold text-white mb-1">Pago Fácil</h4>
+                    <p class="text-xs text-gray-500">Efectivo, transferencia o OXXO... ¡Como te sea más fácil!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Comunidad -->
+    <section class="max-w-4xl mx-auto px-4 pb-12">
+        <div class="bg-gradient-to-r from-infit-pink/10 to-white/5 border border-infit-pink/20 rounded-2xl p-6 md:p-8">
+            <div class="flex flex-col md:flex-row items-center gap-6">
+                <div class="flex-shrink-0">
+                    <div class="w-24 h-24 rounded-full bg-infit-pink/20 flex items-center justify-center">
+                        <span class="text-5xl">🇲🇽</span>
+                    </div>
+                </div>
+                <div class="text-center md:text-left">
+                    <h3 class="text-lg font-heading font-bold text-white uppercase italic mb-2">
+                        Hecho en Santa Ana Hueytlalpan
+                    </h3>
+                    <p class="text-gray-400 text-sm">
+                        Desde nuestro pueblo hasta tu hogar. Planes de nutrición y entrenamiento 
+                        diseñados con el sazón y estilo que nos caracteriza, con ingredientes que 
+                        encuentras en el mercado local o la tienda de la esquina. 
+                        <span class="text-infit-pink font-bold">¡Porque tu bienestar empieza en casa!</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer Notes (Bloques Separados) -->
     <div class="max-w-4xl mx-auto px-6 pb-12">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             
-            <!-- Bloque 1: Garantía México -->
+            <!-- Bloque 1: Garantía -->
             <div class="bg-gray-900/50 border border-infit-pink/30 p-4 rounded-xl flex flex-col items-center justify-center text-center gap-2 hover:border-infit-pink/50 transition-colors">
                 <i class="fas fa-shield-alt text-infit-pink text-2xl animate-pulse"></i>
                 <p class="text-xs text-gray-400">
-                    <strong class="text-white uppercase">Confianza INFIT México:</strong><br>
-                    Nosotros confiamos en ti. Solicita tu plan hoy, y realiza tu pago únicamente cuando hayas recibido tu material completo.
+                    <strong class="text-white uppercase">Confianza INFIT:</strong><br>
+                    Solicita tu plan hoy, y realiza tu pago únicamente cuando hayas recibido tu material completo. Sin riesgos.
                 </p>
             </div>
 
-            <!-- Bloque 2: Aviso USA -->
-            <div class="bg-gray-900/80 border border-gray-700 p-4 rounded-xl flex flex-col items-center justify-center text-center gap-2 relative overflow-hidden hover:border-gray-600 transition-colors">
-                <div class="absolute top-0 right-0 text-6xl text-white opacity-[0.05] pointer-events-none grayscale"><i class="fas fa-flag-usa"></i></div>
-                
-                <i class="fas fa-globe-americas text-white text-2xl"></i>
+            <!-- Bloque 2: Pago Local -->
+            <div class="bg-gray-900/80 border border-infit-pink/50 p-4 rounded-xl flex flex-col items-center justify-center text-center gap-2 relative overflow-hidden hover:border-infit-pink transition-colors">
+                <i class="fas fa-wallet text-infit-pink text-2xl"></i>
                 <p class="text-xs text-gray-400">
-                    <strong class="text-white uppercase">🇺🇸 Paisanos en EE.UU.</strong><br>
-                    El precio se ajusta por soporte tecnológico, envíos y comisiones de transferencia internacional.
+                    <strong class="text-infit-pink uppercase">💳 Pago Fácil</strong><br>
+                    Efectivo, transferencia, OXXO... ¡Como te sea más cómodo!
                 </p>
             </div>
 
         </div>
     </div>
 
+    <!-- Bloque USA -->
+    <div class="max-w-4xl mx-auto px-6 pb-12">
+        <div class="bg-gray-900/80 border border-gray-700 p-4 rounded-xl flex flex-col items-center justify-center text-center gap-2 relative overflow-hidden hover:border-gray-600 transition-colors">
+            <div class="absolute top-0 right-0 text-6xl text-white opacity-[0.05] pointer-events-none grayscale"><i class="fas fa-flag-usa"></i></div>
+            
+            <i class="fas fa-globe-americas text-white text-2xl"></i>
+            <p class="text-xs text-gray-400">
+                <strong class="text-white uppercase">🇺🇸 Paisanos en EE.UU.</strong><br>
+                El precio se ajusta por soporte tecnológico, envíos y comisiones de transferencia internacional.
+            </p>
+        </div>
+    </div>
+
     <!-- Modal Formulario (Pedido) -->
     <div id="order-modal" class="fixed inset-0 z-[100] hidden overflow-y-auto">
-        <div class="fixed inset-0 bg-black/95 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-black/90 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
+        
+        <!-- Modal Content -->
         <div class="relative min-h-screen md:min-h-0 flex items-end md:items-center justify-center p-0 md:p-4">
-            <div class="w-full md:w-[500px] bg-[#0a0a0a] border border-white/10 rounded-t-3xl md:rounded-2xl p-6 md:p-8 transition-transform duration-300 transform translate-y-full md:translate-y-0" id="modal-panel">
+            <div class="w-full md:w-[520px] bg-[#0a0a0a] border border-infit-pink/20 rounded-t-3xl md:rounded-2xl p-6 md:p-8 transition-transform duration-300 transform translate-y-full md:translate-y-0" id="modal-panel">
                 
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-xl font-heading font-bold text-white uppercase italic">Solicitud de Plan</h3>
-                    <button onclick="closeModal()" class="text-gray-500 hover:text-white transition-colors"><i class="fas fa-times text-xl"></i></button>
+                    <h3 class="text-xl font-heading font-bold text-white uppercase italic">Configura tu Plan</h3>
+                    <button onclick="closeModal()" class="text-gray-500 hover:text-white"><i class="fas fa-times text-xl"></i></button>
                 </div>
 
                 <!-- Indicador de progreso -->
@@ -499,21 +643,23 @@
                     <div id="step-2" class="step-indicator w-2 h-2 rounded-full bg-gray-600"></div>
                     <div id="step-3" class="step-indicator w-2 h-2 rounded-full bg-gray-600"></div>
                     <div id="step-4" class="step-indicator w-2 h-2 rounded-full bg-gray-600"></div>
+                    <div id="step-5" class="step-indicator w-2 h-2 rounded-full bg-gray-600"></div>
                 </div>
 
-                <div class="bg-white/5 p-3 rounded border border-white/10 mb-6 flex justify-between items-center">
+                <!-- Resumen Selección -->
+                <div class="bg-infit-pink/10 p-3 rounded border border-infit-pink/20 mb-6 flex justify-between items-center">
                     <div>
-                        <p class="text-[10px] text-gray-400 uppercase font-bold">Plan Seleccionado</p>
+                        <p class="text-[10px] text-infit-pink uppercase font-bold">Plan Seleccionado</p>
                         <p id="modal-plan-name" class="text-white font-bold text-lg leading-none">Combo Total</p>
                     </div>
                     <div class="text-right">
-                        <p id="modal-plan-price" class="text-infit-gold font-bold text-xl">$999</p>
-                        <p class="text-[9px] text-gray-500 uppercase">A pagar al recibir</p>
+                        <p id="modal-plan-price" class="text-infit-gold font-bold text-xl">$550</p>
+                        <p class="text-[9px] text-gray-500 uppercase">Mensual</p>
                     </div>
                 </div>
 
                 <form id="client-form" onsubmit="handleOrder(event)" class="space-y-4 max-h-[70vh] overflow-y-auto pr-2 custom-scrollbar">
-                    <!-- PASO 1: Datos básicos -->
+                    <!-- Datos Básicos -->
                     <div class="grid grid-cols-1 gap-4">
                         <div>
                             <label class="block text-xs text-gray-500 uppercase font-bold mb-1">
@@ -523,29 +669,23 @@
                         </div>
                         <div>
                             <label class="block text-xs text-gray-500 uppercase font-bold mb-1">
-                                <i class="fas fa-map-marker-alt text-infit-pink mr-1"></i>Colonia y Ciudad
+                                <i class="fas fa-city text-infit-pink mr-1"></i>Ciudad/Colonia
                             </label>
-                            <input type="text" id="client-origin" required class="input-field w-full rounded p-3" placeholder="Ej. Centro, Santa Ana Hueytlalpan">
-                        </div>
-                        <div>
-                            <label class="block text-xs text-gray-500 uppercase font-bold mb-1">
-                                <i class="fas fa-heart text-infit-pink mr-1"></i>¿Quién te recomendó? (Opcional)
-                            </label>
-                            <input type="text" id="client-referrer" class="input-field w-full rounded p-3" placeholder="Nombre de tu amiga">
+                            <input type="text" id="client-city" required class="input-field w-full rounded p-3" placeholder="Ej. Santa Ana, Tulancingo">
                         </div>
                     </div>
 
-                    <!-- Campo de Objetivo (Solo Nutrición y Combo Total) -->
-                    <div id="fields-goal" class="hidden space-y-4 border-t border-gray-800 pt-4 animate-bounce-in">
-                        <p class="text-white text-xs font-bold uppercase">
-                            <i class="fas fa-bullseye text-infit-pink mr-1"></i>¿Cuál es tu objetivo?
+                    <!-- Campo de Objetivo -->
+                    <div id="fields-goal" class="space-y-4 border-t border-gray-800 pt-4 animate-bounce-in">
+                        <p class="text-infit-pink text-xs font-bold uppercase">
+                            <i class="fas fa-bullseye mr-1"></i>¿Cuál es tu objetivo?
                         </p>
                         <div class="grid grid-cols-1 gap-3">
                             <label class="cursor-pointer block">
                                 <input type="radio" name="goal" value="Bajar de grasa" class="goal-radio hidden">
-                                <div class="goal-card input-field p-4 rounded-lg flex items-center gap-3">
-                                    <div class="goal-icon bg-red-500/20 p-3 rounded-lg text-red-400 transition-transform">
-                                        <i class="fas fa-fire-flame-curved text-xl"></i>
+                                <div class="goal-card input-field p-3 rounded-lg flex items-center gap-3">
+                                    <div class="goal-icon bg-red-500/20 p-2 rounded-lg text-red-400 transition-transform">
+                                        <i class="fas fa-fire-flame-curved text-lg"></i>
                                     </div>
                                     <div>
                                         <p class="text-white font-bold text-sm">🔥 Bajar de grasa</p>
@@ -554,36 +694,56 @@
                                 </div>
                             </label>
                             <label class="cursor-pointer block">
-                                <input type="radio" name="goal" value="Mantenimiento" class="goal-radio hidden">
-                                <div class="goal-card input-field p-4 rounded-lg flex items-center gap-3">
-                                    <div class="goal-icon bg-blue-500/20 p-3 rounded-lg text-blue-400 transition-transform">
-                                        <i class="fas fa-scale-balanced text-xl"></i>
+                                <input type="radio" name="goal" value="Tonificar" class="goal-radio hidden">
+                                <div class="goal-card input-field p-3 rounded-lg flex items-center gap-3">
+                                    <div class="goal-icon bg-blue-500/20 p-2 rounded-lg text-blue-400 transition-transform">
+                                        <i class="fas fa-dumbbell text-lg"></i>
                                     </div>
                                     <div>
-                                        <p class="text-white font-bold text-sm">⚖️ Mantenimiento</p>
-                                        <p class="text-gray-500 text-[10px]">Mantén tu peso y mejora hábitos</p>
+                                        <p class="text-white font-bold text-sm">💪 Tonificar</p>
+                                        <p class="text-gray-500 text-[10px]">Define y fortalece tu cuerpo</p>
                                     </div>
                                 </div>
                             </label>
                             <label class="cursor-pointer block">
-                                <input type="radio" name="goal" value="Subir de forma saludable" class="goal-radio hidden">
-                                <div class="goal-card input-field p-4 rounded-lg flex items-center gap-3">
-                                    <div class="goal-icon bg-green-500/20 p-3 rounded-lg text-green-400 transition-transform">
-                                        <i class="fas fa-chart-line text-xl"></i>
+                                <input type="radio" name="goal" value="Mantenimiento" class="goal-radio hidden">
+                                <div class="goal-card input-field p-3 rounded-lg flex items-center gap-3">
+                                    <div class="goal-icon bg-green-500/20 p-2 rounded-lg text-green-400 transition-transform">
+                                        <i class="fas fa-chart-line text-lg"></i>
                                     </div>
                                     <div>
-                                        <p class="text-white font-bold text-sm">📈 Subir de forma saludable</p>
-                                        <p class="text-gray-500 text-[10px]">Gana masa muscular de manera sana</p>
+                                        <p class="text-white font-bold text-sm">📈 Mantenimiento</p>
+                                        <p class="text-gray-500 text-[10px]">Mantén tu peso y mejora</p>
                                     </div>
                                 </div>
                             </label>
                         </div>
                     </div>
 
-                    <!-- NUEVO: Campo de Preferencia de Cocina (Solo Nutrición y Combo Total) -->
-                    <div id="fields-cuisine" class="hidden space-y-4 border-t border-gray-800 pt-4 animate-bounce-in">
-                        <p class="text-white text-xs font-bold uppercase">
-                            <i class="fas fa-utensils text-infit-pink mr-1"></i>Preferencia de Cocina
+                    <!-- Campo de ¿Quién te recomendó? (PARA TODOS LOS PLANES) -->
+                    <div id="fields-referrer" class="space-y-4 border-t border-gray-800 pt-4 animate-bounce-in">
+                        <p class="text-infit-pink text-xs font-bold uppercase">
+                            <i class="fas fa-heart text-yellow-400 mr-1"></i>¿Quién te recomendó? (Opcional)
+                        </p>
+                        <input 
+                            type="text" 
+                            id="client-referrer" 
+                            class="input-field w-full rounded p-3" 
+                            placeholder="Ej. María García, mi comadre Ana..."
+                        >
+                        <div class="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-3">
+                            <p class="text-[10px] text-gray-300 leading-relaxed">
+                                <i class="fas fa-hands-helping text-yellow-400 mr-1"></i>
+                                <strong class="text-yellow-300">¡Apoya a quien te recomendó!</strong><br>
+                                Si alguien te recomendó INFIT, mencionarlo ayuda a esa persona a construir también su mejor versión. 🙌
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Campo de Preferencia de Cocina (SOLO NUTRICIÓN Y COMBO) -->
+                    <div id="fields-cuisine" class="space-y-4 border-t border-gray-800 pt-4 animate-bounce-in">
+                        <p class="text-infit-pink text-xs font-bold uppercase">
+                            <i class="fas fa-utensils mr-1"></i>Preferencia de Cocina
                         </p>
                         <div class="grid grid-cols-1 gap-3">
                             <label class="cursor-pointer block">
@@ -619,16 +779,88 @@
                         </p>
                     </div>
 
+                    <!-- Campo de Alimentos a Excluir (SOLO NUTRICIÓN Y COMBO) -->
+                    <div id="fields-exclude" class="space-y-4 border-t border-gray-800 pt-4 animate-bounce-in">
+                        <p class="text-infit-pink text-xs font-bold uppercase">
+                            <i class="fas fa-ban text-red-400 mr-1"></i>Alimentos a Excluir
+                        </p>
+                        <p class="text-gray-500 text-[10px] mb-3">
+                            ¿Hay algún alimento que no te guste o te haga daño? Marca las opciones que aplican:
+                        </p>
+                        
+                        <div class="grid grid-cols-2 gap-2">
+                            <label class="exclude-item flex items-center gap-2 p-2 rounded border border-gray-700 cursor-pointer">
+                                <input type="checkbox" name="exclude" value="Lácteos" class="exclude-checkbox">
+                                <span class="text-xs text-gray-300">🥛 Lácteos</span>
+                            </label>
+                            <label class="exclude-item flex items-center gap-2 p-2 rounded border border-gray-700 cursor-pointer">
+                                <input type="checkbox" name="exclude" value="Gluten" class="exclude-checkbox">
+                                <span class="text-xs text-gray-300">🌾 Gluten</span>
+                            </label>
+                            <label class="exclude-item flex items-center gap-2 p-2 rounded border border-gray-700 cursor-pointer">
+                                <input type="checkbox" name="exclude" value="Mariscos" class="exclude-checkbox">
+                                <span class="text-xs text-gray-300">🦐 Mariscos</span>
+                            </label>
+                            <label class="exclude-item flex items-center gap-2 p-2 rounded border border-gray-700 cursor-pointer">
+                                <input type="checkbox" name="exclude" value="Pescado" class="exclude-checkbox">
+                                <span class="text-xs text-gray-300">🐟 Pescado</span>
+                            </label>
+                            <label class="exclude-item flex items-center gap-2 p-2 rounded border border-gray-700 cursor-pointer">
+                                <input type="checkbox" name="exclude" value="Huevo" class="exclude-checkbox">
+                                <span class="text-xs text-gray-300">🥚 Huevo</span>
+                            </label>
+                            <label class="exclude-item flex items-center gap-2 p-2 rounded border border-gray-700 cursor-pointer">
+                                <input type="checkbox" name="exclude" value="Nueces" class="exclude-checkbox">
+                                <span class="text-xs text-gray-300">🥜 Nueces</span>
+                            </label>
+                            <label class="exclude-item flex items-center gap-2 p-2 rounded border border-gray-700 cursor-pointer">
+                                <input type="checkbox" name="exclude" value="Soya" class="exclude-checkbox">
+                                <span class="text-xs text-gray-300">🫘 Soya</span>
+                            </label>
+                            <label class="exclude-item flex items-center gap-2 p-2 rounded border border-gray-700 cursor-pointer">
+                                <input type="checkbox" name="exclude" value="Picante" class="exclude-checkbox">
+                                <span class="text-xs text-gray-300">🌶️ Picante</span>
+                            </label>
+                            <label class="exclude-item flex items-center gap-2 p-2 rounded border border-gray-700 cursor-pointer">
+                                <input type="checkbox" name="exclude" value="Cerdo" class="exclude-checkbox">
+                                <span class="text-xs text-gray-300">🐷 Cerdo</span>
+                            </label>
+                            <label class="exclude-item flex items-center gap-2 p-2 rounded border border-gray-700 cursor-pointer">
+                                <input type="checkbox" name="exclude" value="Pollo" class="exclude-checkbox">
+                                <span class="text-xs text-gray-300">🍗 Pollo</span>
+                            </label>
+                            <label class="exclude-item flex items-center gap-2 p-2 rounded border border-gray-700 cursor-pointer">
+                                <input type="checkbox" name="exclude" value="Res" class="exclude-checkbox">
+                                <span class="text-xs text-gray-300">🥩 Res</span>
+                            </label>
+                            <label class="exclude-item flex items-center gap-2 p-2 rounded border border-gray-700 cursor-pointer">
+                                <input type="checkbox" name="exclude" value="Cebolla" class="exclude-checkbox">
+                                <span class="text-xs text-gray-300">🧅 Cebolla</span>
+                            </label>
+                        </div>
+
+                        <div class="mt-3">
+                            <label class="block text-[10px] text-gray-500 uppercase font-bold mb-1">
+                                <i class="fas fa-pen text-infit-pink mr-1"></i>Otros alimentos que desees excluir:
+                            </label>
+                            <textarea 
+                                id="exclude-other" 
+                                class="input-field w-full rounded p-2 text-sm min-h-[60px]" 
+                                placeholder="Ej: No me gusta el cilantro, soy alérgica al mariscos..."
+                            ></textarea>
+                        </div>
+                    </div>
+
+                    <!-- CAMPOS DINÁMICOS: NUTRICIÓN -->
                     <div id="fields-nutrition" class="hidden space-y-4 border-t border-gray-800 pt-4">
                         <div class="flex justify-between items-center">
-                            <p class="text-white text-xs font-bold uppercase"><i class="fas fa-apple-alt mr-1 text-infit-pink"></i> Datos Nutricionales</p>
-                            <input type="hidden" name="units" value="metric">
+                            <p class="text-infit-pink text-xs font-bold uppercase"><i class="fas fa-apple-alt mr-1"></i> Datos Nutricionales</p>
                         </div>
                         
                         <div class="grid grid-cols-3 gap-2">
                             <div>
                                 <label class="block text-[10px] text-gray-500 uppercase font-bold mb-1">Edad</label>
-                                <input type="number" id="client-age" class="input-field w-full rounded p-2 text-sm" placeholder="25" min="10" max="99">
+                                <input type="number" id="client-age" class="input-field w-full rounded p-2 text-sm" placeholder="25">
                             </div>
                             <div>
                                 <label class="block text-[10px] text-gray-500 uppercase font-bold mb-1">Peso (kg)</label>
@@ -636,7 +868,7 @@
                             </div>
                             <div>
                                 <label class="block text-[10px] text-gray-500 uppercase font-bold mb-1">Estatura (cm)</label>
-                                <input type="text" id="client-height" class="input-field w-full rounded p-2 text-sm" placeholder="165">
+                                <input type="text" id="client-height" class="input-field w-full rounded p-2 text-sm" placeholder="160">
                             </div>
                         </div>
                         <div>
@@ -649,29 +881,30 @@
                                     <option value="Intenso (Ejercicio 5+ días)">Intenso (5+ días/sem)</option>
                                 </optgroup>
                                 <optgroup label="💼 NO HAGO EJERCICIO (Vida Diaria)">
-                                    <option value="Sedentario (Oficina/Casa)">Sedentario (Oficina/Casa)</option>
-                                    <option value="Activo (De pie/Caminar)">Activo (Caminar/Trabajo físico)</option>
+                                    <option value="Sedentario (Oficina/Casa)">Sedentario (Oficina/Sentada)</option>
+                                    <option value="Activo (De pie/Caminar)">Activo (Trabajo físico/Caminar)</option>
                                     <option value="Muy Activo (Carga pesada)">Muy Activo (Esfuerzo físico)</option>
                                 </optgroup>
                             </select>
                         </div>
                     </div>
 
+                    <!-- CAMPOS DINÁMICOS: ENTRENAMIENTO -->
                     <div id="fields-training" class="hidden space-y-4 border-t border-gray-800 pt-4">
-                        <p class="text-white text-xs font-bold uppercase"><i class="fas fa-dumbbell mr-1 text-infit-pink"></i> Datos Entrenamiento</p>
+                        <p class="text-infit-pink text-xs font-bold uppercase"><i class="fas fa-dumbbell mr-1"></i> Datos Entrenamiento</p>
                         <div>
                             <label class="block text-xs text-gray-500 uppercase font-bold mb-2">Lugar de Entreno</label>
                             <div class="grid grid-cols-2 gap-2">
                                 <label class="cursor-pointer">
                                     <input type="radio" name="place" value="Gimnasio" class="peer hidden" checked>
-                                    <div class="input-field p-3 rounded text-center text-xs font-bold peer-checked:border-infit-pink peer-checked:text-infit-pink peer-checked:bg-infit-pink/10 hover:bg-white/5 transition-all">
+                                    <div class="input-field p-3 rounded text-center text-xs font-bold peer-checked:border-infit-pink peer-checked:text-infit-pink hover:bg-white/5">
                                         <i class="fas fa-building mb-1 block text-lg"></i> Gimnasio
                                     </div>
                                 </label>
                                 <label class="cursor-pointer">
                                     <input type="radio" name="place" value="Casa" class="peer hidden">
-                                    <div class="input-field p-3 rounded text-center text-xs font-bold peer-checked:border-infit-pink peer-checked:text-infit-pink peer-checked:bg-infit-pink/10 hover:bg-white/5 transition-all">
-                                        <i class="fas fa-home mb-1 block text-lg"></i> Casa
+                                    <div class="input-field p-3 rounded text-center text-xs font-bold peer-checked:border-infit-pink peer-checked:text-infit-pink hover:bg-white/5">
+                                        <i class="fas fa-home mb-1 block text-lg"></i> Casa (Mancuernas)
                                     </div>
                                 </label>
                             </div>
@@ -680,24 +913,24 @@
                         <div>
                             <label class="block text-xs text-gray-500 uppercase font-bold mb-2">Días Disponibles</label>
                             <div class="flex justify-between gap-1">
-                                <label class="cursor-pointer flex-1 tooltip" data-tip="Lunes"><input type="checkbox" value="Lun" class="day-checkbox hidden"><div class="input-field h-8 flex items-center justify-center rounded text-[10px] font-bold transition-all hover:border-infit-pink/50">L</div></label>
-                                <label class="cursor-pointer flex-1 tooltip" data-tip="Martes"><input type="checkbox" value="Mar" class="day-checkbox hidden"><div class="input-field h-8 flex items-center justify-center rounded text-[10px] font-bold transition-all hover:border-infit-pink/50">M</div></label>
-                                <label class="cursor-pointer flex-1 tooltip" data-tip="Miércoles"><input type="checkbox" value="Mié" class="day-checkbox hidden"><div class="input-field h-8 flex items-center justify-center rounded text-[10px] font-bold transition-all hover:border-infit-pink/50">M</div></label>
-                                <label class="cursor-pointer flex-1 tooltip" data-tip="Jueves"><input type="checkbox" value="Jue" class="day-checkbox hidden"><div class="input-field h-8 flex items-center justify-center rounded text-[10px] font-bold transition-all hover:border-infit-pink/50">J</div></label>
-                                <label class="cursor-pointer flex-1 tooltip" data-tip="Viernes"><input type="checkbox" value="Vie" class="day-checkbox hidden"><div class="input-field h-8 flex items-center justify-center rounded text-[10px] font-bold transition-all hover:border-infit-pink/50">V</div></label>
-                                <label class="cursor-pointer flex-1 tooltip" data-tip="Sábado"><input type="checkbox" value="Sáb" class="day-checkbox hidden"><div class="input-field h-8 flex items-center justify-center rounded text-[10px] font-bold transition-all hover:border-infit-pink/50">S</div></label>
-                                <label class="cursor-pointer flex-1 tooltip" data-tip="Domingo"><input type="checkbox" value="Dom" class="day-checkbox hidden"><div class="input-field h-8 flex items-center justify-center rounded text-[10px] font-bold transition-all hover:border-infit-pink/50">D</div></label>
+                                <label class="cursor-pointer flex-1"><input type="checkbox" value="Lun" class="day-checkbox hidden"><div class="input-field h-8 flex items-center justify-center rounded text-[10px]">L</div></label>
+                                <label class="cursor-pointer flex-1"><input type="checkbox" value="Mar" class="day-checkbox hidden"><div class="input-field h-8 flex items-center justify-center rounded text-[10px]">M</div></label>
+                                <label class="cursor-pointer flex-1"><input type="checkbox" value="Mié" class="day-checkbox hidden"><div class="input-field h-8 flex items-center justify-center rounded text-[10px]">M</div></label>
+                                <label class="cursor-pointer flex-1"><input type="checkbox" value="Jue" class="day-checkbox hidden"><div class="input-field h-8 flex items-center justify-center rounded text-[10px]">J</div></label>
+                                <label class="cursor-pointer flex-1"><input type="checkbox" value="Vie" class="day-checkbox hidden"><div class="input-field h-8 flex items-center justify-center rounded text-[10px]">V</div></label>
+                                <label class="cursor-pointer flex-1"><input type="checkbox" value="Sáb" class="day-checkbox hidden"><div class="input-field h-8 flex items-center justify-center rounded text-[10px]">S</div></label>
+                                <label class="cursor-pointer flex-1"><input type="checkbox" value="Dom" class="day-checkbox hidden"><div class="input-field h-8 flex items-center justify-center rounded text-[10px]">D</div></label>
                             </div>
                         </div>
                     </div>
 
-                    <div class="pt-4 sticky bottom-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a] to-transparent pb-2">
-                        <button type="submit" id="submit-btn" class="w-full bg-[#25D366] text-white font-bold py-4 rounded-lg uppercase tracking-widest hover:bg-[#20bd5a] transition-all flex justify-center items-center gap-2 shadow-[0_0_15px_rgba(37,211,102,0.3)] active:scale-95">
+                    <div class="pt-4 sticky bottom-0 bg-[#0a0a0a] border-t border-gray-800">
+                        <button type="submit" id="submit-btn" class="w-full bg-[#25D366] text-white font-bold py-4 rounded-lg uppercase tracking-widest hover:bg-[#20bd5a] transition-colors flex justify-center items-center gap-2 shadow-[0_0_15px_rgba(37,211,102,0.3)]">
                             <i class="fab fa-whatsapp text-2xl"></i>
-                            <span>Pedir Plan por WhatsApp</span>
+                            <span>Finalizar Pedido en WhatsApp</span>
                         </button>
                         <p class="text-[10px] text-center text-gray-500 mt-2">
-                            <i class="fas fa-lock text-infit-gold"></i> Pagarás hasta que recibas tu material.
+                            <i class="fas fa-exclamation-circle text-infit-pink"></i> Es necesario hacer clic para enviar los datos por WhatsApp.
                         </p>
                     </div>
                 </form>
@@ -707,18 +940,20 @@
 
     <!-- MODAL DE VIDEO -->
     <div id="video-modal" class="fixed inset-0 z-[120] hidden bg-black/95 flex items-center justify-center p-4">
-        <div class="relative w-full max-w-4xl bg-black rounded-lg overflow-hidden border border-white/10 shadow-2xl">
-            <button onclick="closeVideo()" class="absolute top-2 right-2 z-10 bg-black/50 text-white hover:text-infit-pink rounded-full w-10 h-10 flex items-center justify-center text-xl backdrop-blur-sm transition-colors">
+        <div class="relative w-full max-w-4xl bg-black rounded-lg overflow-hidden border border-infit-pink/30 shadow-2xl">
+            <button onclick="closeVideo()" class="absolute top-2 right-2 z-10 bg-black/50 text-white hover:text-infit-pink rounded-full w-10 h-10 flex items-center justify-center text-xl backdrop-blur-sm border border-white/20">
                 <i class="fas fa-times"></i>
             </button>
+            
             <div class="aspect-video w-full">
                 <video id="main-video-player" class="w-full h-full object-contain" controls controlsList="nodownload">
                     <source src="" type="video/mp4">
                     Tu navegador no soporta videos HTML5.
                 </video>
             </div>
+            
             <div class="p-4 bg-[#121212]">
-                <h4 id="video-title" class="text-white font-bold uppercase text-lg">Vista Previa</h4>
+                <h4 id="video-title" class="text-infit-pink font-bold uppercase text-lg">Vista Previa</h4>
                 <p class="text-gray-400 text-xs mt-1">Mira un poco de lo que incluye este plan.</p>
             </div>
         </div>
@@ -726,35 +961,43 @@
 
     <!-- Success Overlay -->
     <div id="success-overlay" class="fixed inset-0 z-[110] hidden bg-black flex flex-col items-center justify-center p-4 text-center">
-        <div class="bg-infit-pink/20 p-6 rounded-full mb-6 animate-bounce">
+        <div class="bg-infit-pink/10 p-6 rounded-full mb-6 animate-bounce">
             <i class="fas fa-check text-4xl text-infit-pink"></i>
         </div>
-        <h2 class="text-3xl font-heading font-bold text-white uppercase italic mb-2">¡Solicitud Enviada!</h2>
+        <h2 class="text-3xl font-heading font-bold text-white uppercase italic mb-2">¡Todo Listo!</h2>
         <p class="text-gray-400 max-w-md mb-8">
-            Gracias <span id="success-name" class="text-white font-bold"></span>.
+            Gracias <span id="success-name" class="text-infit-pink font-bold"></span>.
             <br>
-            Hemos abierto WhatsApp para que envíes tus datos y comencemos a trabajar en tu plan.
+            Hemos abierto WhatsApp para que confirmes tu inscripción.
         </p>
-        <button onclick="location.reload()" class="text-gray-500 hover:text-white underline text-xs transition-colors">Volver al inicio</button>
+        <button onclick="location.reload()" class="text-gray-500 hover:text-white underline text-xs">Volver al inicio</button>
     </div>
 
-    <footer class="bg-black py-8 border-t border-white/5 mt-auto">
+    <footer class="bg-black py-8 border-t border-gray-900 mt-auto">
         <div class="text-center">
-            <p class="text-white font-heading font-bold text-xl italic tracking-widest">IN<span class="text-infit-gold">FIT</span></p>
-            <p class="text-gray-700 text-[10px] uppercase tracking-widest mt-1">Santa Ana Hueytlalpan · Tulancingo · México</p>
+            <p class="text-infit-gold font-heading font-bold text-xl italic tracking-widest">IN<span class="text-white">FIT</span></p>
+            <p class="text-gray-700 text-[10px] uppercase tracking-widest mt-1">Santa Ana Hueytlalpan · Hidalgo · México</p>
             <p class="text-gray-800 text-[9px] mt-4">Desarrollado con ⚡ para tu Mejor Versión</p>
         </div>
     </footer>
 
     <script>
+        // ==========================================
+        //  1. CONFIGURACIÓN EDITABLE
+        // ==========================================
         let config = {
-            promoText: "Promoción 13 – 27 de marzo. Precios especiales solo para los primeros clientes. Después no volverán. Garantía Total: Pagas hasta recibir tu plan.",
+            promoText: "Promoción 27 de Marzo al 05 de Abril. Precios especiales para los primeros clientes. Garantía total pagas hasta recibir tu plan",
             priceNutri: 199,
             priceTrain: 299,
             priceCombo: 399,
-            priceOld: 699,
-            comboNote: "*Pagas hasta que te entreguemos todo tu material.*"
+            priceOld: 700,
+            comboNote: "*La opción que genera mejores resultados estadísticamente.*"
         };
+        // ==========================================
+
+        // ==========================================
+        //  2. LÓGICA DE FIREBASE Y NEGOCIO
+        // ==========================================
         
         let db;
         let auth;
@@ -766,6 +1009,7 @@
             messagingSenderId: "204458486575",
             appId: "1:204458486575:web:57a2a7b62053cd33afcfda"
         };
+
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'infit-web';
 
         try {
@@ -773,6 +1017,7 @@
                 firebase.initializeApp(firebaseConfig);
                 db = firebase.firestore();
                 auth = firebase.auth();
+                
                 if (typeof __initial_auth_token !== 'undefined') {
                     auth.signInWithCustomToken(__initial_auth_token);
                 } else {
@@ -786,6 +1031,7 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
+            
             const ref = urlParams.get('ref');
             if (ref) {
                 affiliateCode = ref;
@@ -793,24 +1039,26 @@
                 document.getElementById('affiliate-badge').classList.add('inline-block');
                 document.getElementById('affiliate-name').textContent = ref;
             }
+
             const isAdmin = urlParams.get('admin') === 'true';
             if (isAdmin) {
                 const adminElements = document.querySelectorAll('.admin-only');
                 adminElements.forEach(el => el.style.display = 'block');
+                console.log("Modo Admin Activado");
             }
+
             loadConfig();
             setupStepIndicators();
         });
 
         function setupStepIndicators() {
             const nameInput = document.getElementById('client-name');
-            const originInput = document.getElementById('client-origin');
+            const cityInput = document.getElementById('client-city');
             
-            [nameInput, originInput].forEach(input => {
+            [nameInput, cityInput].forEach(input => {
                 input.addEventListener('input', updateStepIndicators);
             });
             
-            // Actualizar pasos cuando se selecciona objetivo
             document.querySelectorAll('.goal-radio').forEach(radio => {
                 radio.addEventListener('change', () => {
                     const step2 = document.getElementById('step-2');
@@ -820,8 +1068,7 @@
                     step3.classList.add('active');
                 });
             });
-            
-            // Actualizar pasos cuando se selecciona cocina
+
             document.querySelectorAll('.cuisine-radio').forEach(radio => {
                 radio.addEventListener('change', () => {
                     const step3 = document.getElementById('step-3');
@@ -831,26 +1078,61 @@
                     step4.classList.add('active');
                 });
             });
+
+            document.querySelectorAll('.exclude-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', updateExcludeStep);
+            });
+
+            document.getElementById('exclude-other').addEventListener('input', updateExcludeStep);
+        }
+
+        function updateExcludeStep() {
+            const step4 = document.getElementById('step-4');
+            const step5 = document.getElementById('step-5');
+            const checkedItems = document.querySelectorAll('.exclude-checkbox:checked');
+            const excludeOther = document.getElementById('exclude-other').value.trim();
+            
+            if (checkedItems.length > 0 || excludeOther !== '') {
+                step4.classList.remove('active');
+                step4.classList.add('completed');
+                step5.classList.add('active');
+            }
         }
         
         function updateStepIndicators() {
             const name = document.getElementById('client-name').value;
-            const origin = document.getElementById('client-origin').value;
+            const city = document.getElementById('client-city').value;
             const step1 = document.getElementById('step-1');
             const step2 = document.getElementById('step-2');
             
-            if (name && origin) {
+            if (name && city) {
                 step1.classList.remove('active');
                 step1.classList.add('completed');
                 step2.classList.add('active');
             }
         }
 
+        function resetStepIndicators() {
+            for (let i = 1; i <= 5; i++) {
+                const step = document.getElementById(`step-${i}`);
+                step.classList.remove('active', 'completed');
+            }
+            document.getElementById('step-1').classList.add('active');
+            
+            document.querySelectorAll('.goal-radio').forEach(radio => radio.checked = false);
+            document.querySelectorAll('.cuisine-radio').forEach(radio => radio.checked = false);
+            document.querySelectorAll('.exclude-checkbox').forEach(checkbox => checkbox.checked = false);
+            document.getElementById('exclude-other').value = '';
+            document.getElementById('client-referrer').value = '';
+        }
+
         function playVideo(type) {
             const modal = document.getElementById('video-modal');
             const video = document.getElementById('main-video-player');
             const title = document.getElementById('video-title');
+            
             let src = '';
+            
             if (type === 'nutri') {
                 src = 'PA%20+%20Eliminacion%20Mujeres.mp4';
                 title.textContent = "PREVIEW: Plan de Nutrición";
@@ -858,14 +1140,17 @@
                 src = 'PE%20+%20Reto%20Mujeres.mp4';
                 title.textContent = "PREVIEW: Entrenamiento Digital";
             }
+            
             video.src = src;
             modal.classList.remove('hidden');
-            video.play().catch(e => console.log("Auto-play prevenido", e));
+            
+            video.play().catch(e => console.log("Auto-play prevenido por navegador", e));
         }
 
         function closeVideo() {
             const modal = document.getElementById('video-modal');
             const video = document.getElementById('main-video-player');
+            
             video.pause();
             video.currentTime = 0;
             video.src = "";
@@ -879,6 +1164,7 @@
             document.getElementById('display-price-combo').textContent = config.priceCombo;
             document.getElementById('display-price-old').textContent = config.priceOld;
             document.getElementById('display-combo-note').textContent = config.comboNote;
+
             document.getElementById('edit-promo').value = config.promoText;
             document.getElementById('edit-price-nutri').value = config.priceNutri;
             document.getElementById('edit-price-train').value = config.priceTrain;
@@ -902,17 +1188,17 @@
         }
 
         function copyConfig() {
-            const code = `
-        let config = {
-            promoText: "${config.promoText}",
-            priceNutri: ${config.priceNutri},
-            priceTrain: ${config.priceTrain},
-            priceCombo: ${config.priceCombo},
-            priceOld: ${config.priceOld},
-            comboNote: "${config.comboNote.replace(/\n/g, '')}"
-        };`;
+            const code = `let config = {
+    promoText: "${config.promoText}",
+    priceNutri: ${config.priceNutri},
+    priceTrain: ${config.priceTrain},
+    priceCombo: ${config.priceCombo},
+    priceOld: ${config.priceOld},
+    comboNote: "${config.comboNote.replace(/\n/g, '')}"
+};`;
+            
             navigator.clipboard.writeText(code).then(() => {
-                alert("Código copiado al portapapeles.");
+                alert("¡Código copiado al portapapeles!");
             });
         }
 
@@ -920,23 +1206,19 @@
             let price = 0;
             const fieldsNutri = document.getElementById('fields-nutrition');
             const fieldsTrain = document.getElementById('fields-training');
-            const fieldsGoal = document.getElementById('fields-goal');
             const fieldsCuisine = document.getElementById('fields-cuisine');
-            
-            // Ocultar todos los campos adicionales primero
+            const fieldsExclude = document.getElementById('fields-exclude');
+
             fieldsNutri.classList.add('hidden');
             fieldsTrain.classList.add('hidden');
-            fieldsGoal.classList.add('hidden');
             fieldsCuisine.classList.add('hidden');
-            
-            // Resetear indicadores de paso
-            resetStepIndicators();
+            fieldsExclude.classList.add('hidden');
             
             if (planName === 'Nutrición') {
                 price = config.priceNutri;
                 fieldsNutri.classList.remove('hidden');
-                fieldsGoal.classList.remove('hidden');
                 fieldsCuisine.classList.remove('hidden');
+                fieldsExclude.classList.remove('hidden');
             } else if (planName === 'Entrenamiento') {
                 price = config.priceTrain;
                 fieldsTrain.classList.remove('hidden');
@@ -944,34 +1226,20 @@
                 price = config.priceCombo;
                 fieldsNutri.classList.remove('hidden');
                 fieldsTrain.classList.remove('hidden');
-                fieldsGoal.classList.remove('hidden');
                 fieldsCuisine.classList.remove('hidden');
+                fieldsExclude.classList.remove('hidden');
             }
-            
+
             selectedPlan = { name: planName, price: price };
             document.getElementById('modal-plan-name').textContent = planName;
-            document.getElementById('modal-plan-price').textContent = `$${price} MXN`;
+            document.getElementById('modal-plan-price').textContent = `$${price}`;
+            
+            resetStepIndicators();
+            
             const modal = document.getElementById('order-modal');
             const panel = document.getElementById('modal-panel');
             modal.classList.remove('hidden');
             setTimeout(() => panel.classList.remove('translate-y-full'), 10);
-        }
-        
-        function resetStepIndicators() {
-            const step1 = document.getElementById('step-1');
-            const step2 = document.getElementById('step-2');
-            const step3 = document.getElementById('step-3');
-            const step4 = document.getElementById('step-4');
-            
-            step1.classList.remove('completed');
-            step1.classList.add('active');
-            step2.classList.remove('active', 'completed');
-            step3.classList.remove('active', 'completed');
-            step4.classList.remove('active', 'completed');
-            
-            // Limpiar selecciones
-            document.querySelectorAll('.goal-radio').forEach(radio => radio.checked = false);
-            document.querySelectorAll('.cuisine-radio').forEach(radio => radio.checked = false);
         }
 
         function closeModal() {
@@ -985,83 +1253,101 @@
             e.preventDefault();
             const submitBtn = document.getElementById('submit-btn');
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
-            
-            const referrerInput = document.getElementById('client-referrer').value;
-            const finalReferrer = referrerInput || affiliateCode || 'Local/Orgánico';
-            
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+
             const formData = {
                 name: document.getElementById('client-name').value,
-                origin: document.getElementById('client-origin').value,
+                city: document.getElementById('client-city').value,
                 plan: selectedPlan.name,
                 price: selectedPlan.price,
-                currency: 'MXN',
-                affiliate: finalReferrer,
+                affiliate: affiliateCode || 'Orgánico',
                 timestamp: new Date().toISOString()
             };
-            
+
             let detailsText = "";
-            let unitLabelW = 'kg';
-            let unitLabelH = 'cm';
+
+            const selectedGoal = document.querySelector('input[name="goal"]:checked');
+            if (selectedGoal) {
+                formData.goal = selectedGoal.value;
+                detailsText += `%0A%0A🎯 *OBJETIVO*%0A• ${formData.goal}`;
+            }
+
+            const referrerName = document.getElementById('client-referrer').value.trim();
+            if (referrerName) {
+                formData.referredBy = referrerName;
+                detailsText += `%0A%0A❤️ *RECOMENDADO POR*%0A• ${referrerName}`;
+            }
+
+            const selectedCuisine = document.querySelector('input[name="cuisine"]:checked');
+            if (selectedCuisine) {
+                formData.cuisine = selectedCuisine.value;
+                detailsText += `%0A%0A🍽️ *PREFERENCIA DE COCINA*%0A• ${formData.cuisine}`;
+            }
+
+            const excludedItems = [];
+            document.querySelectorAll('.exclude-checkbox:checked').forEach(checkbox => {
+                excludedItems.push(checkbox.value);
+            });
+            const excludeOtherText = document.getElementById('exclude-other').value.trim();
             
-            // Capturar el objetivo seleccionado
-            const fieldsGoal = document.getElementById('fields-goal');
-            if (!fieldsGoal.classList.contains('hidden')) {
-                const selectedGoal = document.querySelector('input[name="goal"]:checked');
-                if (selectedGoal) {
-                    formData.goal = selectedGoal.value;
-                    detailsText += `%0A%0A🎯 *OBJETIVO*%0A• ${formData.goal}`;
+            if (excludedItems.length > 0 || excludeOtherText !== '') {
+                formData.excludedFoods = excludedItems;
+                formData.excludedFoodsOther = excludeOtherText;
+                
+                detailsText += `%0A%0A🚫 *ALIMENTOS A EXCLUIR*`;
+                if (excludedItems.length > 0) {
+                    detailsText += `%0A• ${excludedItems.join('%0A• ')}`;
+                }
+                if (excludeOtherText !== '') {
+                    detailsText += `%0A• Otros: ${excludeOtherText}`;
                 }
             }
-            
-            // NUEVO: Capturar la preferencia de cocina
-            const fieldsCuisine = document.getElementById('fields-cuisine');
-            if (!fieldsCuisine.classList.contains('hidden')) {
-                const selectedCuisine = document.querySelector('input[name="cuisine"]:checked');
-                if (selectedCuisine) {
-                    formData.cuisine = selectedCuisine.value;
-                    detailsText += `%0A%0A🍽️ *PREFERENCIA DE COCINA*%0A• ${formData.cuisine}`;
-                }
-            }
-            
+
             if (!document.getElementById('fields-nutrition').classList.contains('hidden')) {
                 formData.age = document.getElementById('client-age').value;
                 formData.weight = document.getElementById('client-weight').value;
                 formData.height = document.getElementById('client-height').value;
                 formData.activity = document.getElementById('client-activity').value;
-                detailsText += `%0A%0A🍎 *DATOS NUTRICIÓN*%0A• Edad: ${formData.age} años%0A• Peso: ${formData.weight} ${unitLabelW}%0A• Estatura: ${formData.height} ${unitLabelH}%0A• Actividad: ${formData.activity || 'No especificada'}`;
+                
+                detailsText += `%0A%0A🍎 *DATOS NUTRICIÓN*%0A• Edad: ${formData.age} años%0A• Peso: ${formData.weight} kg%0A• Estatura: ${formData.height} cm%0A• Actividad: ${formData.activity || 'No especificada'}`;
             }
+
             if (!document.getElementById('fields-training').classList.contains('hidden')) {
                 const place = document.querySelector('input[name="place"]:checked').value;
                 const days = Array.from(document.querySelectorAll('.day-checkbox:checked')).map(cb => cb.value).join(', ');
+                
                 formData.place = place;
                 formData.days = days;
+                
                 detailsText += `%0A%0A🏋️ *DATOS ENTRENO*%0A• Lugar: ${place}%0A• Días Disp: ${days || 'Por definir'}`;
             }
+
             if (db) {
                 try {
                     const user = auth.currentUser;
                     const collectionPath = user 
                         ? db.collection('artifacts').doc(appId).collection('public').doc('data').collection('leads')
                         : null;
+
                     if (collectionPath) await collectionPath.add(formData);
-                } catch (error) { console.error("Firebase Error", error); }
+                } catch (error) { console.error("Error guardando lead en Firebase:", error); }
             }
-            
+
             const phone = "527751056744";
-            const header = `Hola INFIT! 🇲🇽 Soy *${formData.name}* (De ${formData.origin}).%0A%0A✨ Me interesa el *${formData.plan}* (Precio Promoción: $${formData.price} MXN).`;
-            const refText = finalReferrer !== 'Local/Orgánico' ? `%0A%0A🤝 *Vengo recomendada por:* ${finalReferrer}` : '';
-            const paymentCondition = `%0A%0A✅ *Confirmación:* Estoy enterada que realizaré mi pago hasta que reciba mi material completo.`;
-            const motivation = `%0A%0A✨ *¡Lista para mi mejor Versión!*`;
-            const fullText = `${header}${detailsText}${refText}${paymentCondition}${motivation}`;
-            const waLink = `https://wa.me/${phone}?text=${fullText}`;
+            const header = `Hola INFIT! 🚀 Soy *${formData.name}* de ${formData.city}.%0A%0A🔥 Quiero empezar mi *${formData.plan}* ($${formData.price} MXN / Mes).`;
+            const footer = `%0A%0A📝 *Nota:* Estoy de acuerdo en realizar el pago al momento de tener todo mi material.`;
+            const motivation = `%0A%0A✨ *¡Bienvenida a tu mejor Versión!*`;
+            const refText = affiliateCode ? `%0A%0A(Asesor: ${affiliateCode})` : '';
             
+            const fullText = `${header}${detailsText}${footer}${motivation}${refText}`;
+            const waLink = `https://wa.me/${phone}?text=${fullText}`;
+
             window.open(waLink, '_blank');
             closeModal();
             showSuccess(formData.name);
             
             submitBtn.disabled = false;
-            submitBtn.innerHTML = '<i class="fab fa-whatsapp text-2xl"></i><span>Pedir Plan por WhatsApp</span>';
+            submitBtn.innerHTML = '<i class="fab fa-whatsapp text-2xl"></i><span>Finalizar Pedido en WhatsApp</span>';
         }
 
         function showSuccess(name) {
@@ -1070,7 +1356,7 @@
             overlay.classList.remove('hidden');
             
             const end = Date.now() + 2.5 * 1000;
-            const colors = ['#FFD700', '#ec4899', '#ffffff'];
+            const colors = ['#ec4899', '#ffffff', '#FFD700'];
             (function frame() {
                 confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: colors });
                 confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: colors });
