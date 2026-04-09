@@ -37,6 +37,7 @@
                             gray: '#a3a3a3',
                             hidalgo: '#8B4513',
                             universal: '#10b981',
+                            active: '#8B5CF6',
                         }
                     },
                     fontFamily: {
@@ -206,6 +207,11 @@
             border-color: #10b981;
             background: rgba(16, 185, 129, 0.15);
             box-shadow: 0 0 25px rgba(16, 185, 129, 0.3);
+        }
+        .cuisine-radio:checked + .cuisine-card.cuisine-active {
+            border-color: #8B5CF6;
+            background: rgba(139, 92, 246, 0.15);
+            box-shadow: 0 0 25px rgba(139, 92, 246, 0.3);
         }
         .cuisine-radio:checked + .cuisine-card .cuisine-icon {
             transform: scale(1.15) rotate(5deg);
@@ -694,14 +700,14 @@
                                 </div>
                             </label>
                             <label class="cursor-pointer block">
-                                <input type="radio" name="goal" value="Tonificar" class="goal-radio hidden">
+                                <input type="radio" name="goal" value="Subir" class="goal-radio hidden">
                                 <div class="goal-card input-field p-3 rounded-lg flex items-center gap-3">
-                                    <div class="goal-icon bg-blue-500/20 p-2 rounded-lg text-blue-400 transition-transform">
-                                        <i class="fas fa-dumbbell text-lg"></i>
+                                    <div class="goal-icon bg-orange-500/20 p-2 rounded-lg text-orange-400 transition-transform">
+                                        <i class="fas fa-arrow-trend-up text-lg"></i>
                                     </div>
                                     <div>
-                                        <p class="text-white font-bold text-sm">💪 Tonificar</p>
-                                        <p class="text-gray-500 text-[10px]">Define y fortalece tu cuerpo</p>
+                                        <p class="text-white font-bold text-sm">📈 Subir</p>
+                                        <p class="text-gray-500 text-[10px]">Gana masa muscular de forma saludable</p>
                                     </div>
                                 </div>
                             </label>
@@ -712,7 +718,7 @@
                                         <i class="fas fa-chart-line text-lg"></i>
                                     </div>
                                     <div>
-                                        <p class="text-white font-bold text-sm">📈 Mantenimiento</p>
+                                        <p class="text-white font-bold text-sm">📊 Mantenimiento</p>
                                         <p class="text-gray-500 text-[10px]">Mantén tu peso y mejora</p>
                                     </div>
                                 </div>
@@ -746,7 +752,23 @@
                             <i class="fas fa-utensils mr-1"></i>Preferencia de Cocina
                         </p>
                         <div class="grid grid-cols-1 gap-3">
-                            <label class="cursor-pointer block">
+                            <!-- Opción: Plan Activo / Deportista (disponible para Nutrición y Combo) -->
+                            <label id="cuisine-active-option" class="cursor-pointer block">
+                                <input type="radio" name="cuisine" value="Plan Activo / Deportista" class="cuisine-radio hidden">
+                                <div class="cuisine-card cuisine-active input-field p-4 rounded-lg flex items-center gap-3 border-2 border-violet-700/30">
+                                    <div class="cuisine-icon bg-violet-700/20 p-3 rounded-lg text-violet-400 transition-transform">
+                                        <i class="fas fa-running text-xl"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="text-white font-bold text-sm">🏃 Plan Activo / Deportista</p>
+                                        <p class="text-gray-500 text-[10px]">Mayor aporte de proteínas de origen natural para rendimiento óptimo</p>
+                                    </div>
+                                    <div class="text-[10px] text-violet-400 font-bold uppercase">Pro</div>
+                                </div>
+                            </label>
+                            
+                            <!-- Opción: Sazón Tradicional Hidalguense (solo para Nutrición) -->
+                            <label id="cuisine-hidalgo-option" class="cursor-pointer block">
                                 <input type="radio" name="cuisine" value="Sazón tradicional hidalguense" class="cuisine-radio hidden">
                                 <div class="cuisine-card cuisine-hidalgo input-field p-4 rounded-lg flex items-center gap-3 border-2 border-amber-700/30">
                                     <div class="cuisine-icon bg-amber-700/20 p-3 rounded-lg text-amber-500 transition-transform">
@@ -759,7 +781,9 @@
                                     <div class="text-[10px] text-amber-500 font-bold uppercase">Local</div>
                                 </div>
                             </label>
-                            <label class="cursor-pointer block">
+                            
+                            <!-- Opción: Comidas Mexicanas Universales (solo para Nutrición) -->
+                            <label id="cuisine-universal-option" class="cursor-pointer block">
                                 <input type="radio" name="cuisine" value="Comidas mexicanas universales" class="cuisine-radio hidden">
                                 <div class="cuisine-card cuisine-universal input-field p-4 rounded-lg flex items-center gap-3 border-2 border-emerald-700/30">
                                     <div class="cuisine-icon bg-emerald-700/20 p-3 rounded-lg text-emerald-400 transition-transform">
@@ -1208,26 +1232,53 @@
             const fieldsTrain = document.getElementById('fields-training');
             const fieldsCuisine = document.getElementById('fields-cuisine');
             const fieldsExclude = document.getElementById('fields-exclude');
+            
+            // Referencias a las opciones de cocina
+            const cuisineActiveOption = document.getElementById('cuisine-active-option');
+            const cuisineHidalgoOption = document.getElementById('cuisine-hidalgo-option');
+            const cuisineUniversalOption = document.getElementById('cuisine-universal-option');
 
+            // Ocultar todos los campos dinámicos primero
             fieldsNutri.classList.add('hidden');
             fieldsTrain.classList.add('hidden');
             fieldsCuisine.classList.add('hidden');
             fieldsExclude.classList.add('hidden');
+            
+            // Mostrar todas las opciones de cocina por defecto
+            cuisineActiveOption.style.display = 'block';
+            cuisineHidalgoOption.style.display = 'block';
+            cuisineUniversalOption.style.display = 'block';
             
             if (planName === 'Nutrición') {
                 price = config.priceNutri;
                 fieldsNutri.classList.remove('hidden');
                 fieldsCuisine.classList.remove('hidden');
                 fieldsExclude.classList.remove('hidden');
+                // Para Nutrición: mostrar las 3 opciones (Activo/Deportista + Tradicional + Universal)
+                // Ya están visibles por defecto
+                
             } else if (planName === 'Entrenamiento') {
                 price = config.priceTrain;
                 fieldsTrain.classList.remove('hidden');
+                // Para Entrenamiento: no mostrar opciones de cocina
+                
             } else if (planName === 'Combo Total') {
                 price = config.priceCombo;
                 fieldsNutri.classList.remove('hidden');
                 fieldsTrain.classList.remove('hidden');
                 fieldsCuisine.classList.remove('hidden');
                 fieldsExclude.classList.remove('hidden');
+                
+                // Para Combo Total: SOLO mostrar la opción Activo / Deportista
+                cuisineActiveOption.style.display = 'block';
+                cuisineHidalgoOption.style.display = 'none';
+                cuisineUniversalOption.style.display = 'none';
+                
+                // Auto-seleccionar la opción de Plan Activo / Deportista para Combo
+                const activeRadio = cuisineActiveOption.querySelector('input[type="radio"]');
+                if (activeRadio) {
+                    activeRadio.checked = true;
+                }
             }
 
             selectedPlan = { name: planName, price: price };
