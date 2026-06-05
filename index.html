@@ -38,6 +38,7 @@
                             hidalgo: '#8B4513',
                             universal: '#10b981',
                             active: '#8B5CF6',
+                            cyan: '#06b6d4',
                         }
                     },
                     fontFamily: {
@@ -305,6 +306,34 @@
         .price-tag {
             text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
         }
+
+        /* Toggle L-Carnitina */
+        .lcarnitina-toggle {
+            position: relative;
+            width: 48px;
+            height: 24px;
+            background: #333;
+            border-radius: 24px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .lcarnitina-toggle.active {
+            background: #06b6d4;
+        }
+        .lcarnitina-toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+        .lcarnitina-toggle.active::after {
+            transform: translateX(24px);
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col font-sans selection:bg-infit-pink selection:text-white">
@@ -349,6 +378,20 @@
                     <div>
                         <label class="block text-gray-500">Combo Original</label>
                         <input type="number" id="edit-price-old" class="input-field w-full p-2 rounded" oninput="updateContent()">
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-700 pt-4 mt-4">
+                <h4 class="text-white font-bold mb-2">L-Carnitina (MXN)</h4>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-gray-500">Precio L-Carnitina</label>
+                        <input type="number" id="edit-price-lcarnitina" class="input-field w-full p-2 rounded" oninput="updateContent()">
+                    </div>
+                    <div>
+                        <label class="block text-gray-500">Frascos</label>
+                        <input type="number" id="edit-lcarnitina-frascos" class="input-field w-full p-2 rounded" oninput="updateContent()">
                     </div>
                 </div>
             </div>
@@ -431,6 +474,38 @@
                 <span class="text-3xl font-bold text-infit-gold price-tag">$<span id="display-price-nutri">350</span></span>
                 <span class="text-sm text-gray-500 uppercase">MXN / Mes</span>
             </div>
+
+<!-- Toggle L-Carnitina - Nutrición -->
+            <div class="bg-cyan-900/20 border border-cyan-500/30 rounded-lg p-3 mb-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-flask text-cyan-400 text-sm"></i>
+                            <span class="text-white text-xs font-bold">Agregar L-Carnitina</span>
+                        </div>
+                        <p class="text-[10px] text-cyan-300/70 mt-1 ml-5">1 frasco · $<span id="lcarnitina-price-nutri">300</span> MXN</p>
+                    </div>
+                    <div id="lcarnitina-toggle-nutri" class="lcarnitina-toggle" onclick="toggleLcarnitina('nutri')"></div>
+                </div>
+                <!-- Leyendas L-Carnitina -->
+                <div class="mt-2 pt-2 border-t border-cyan-500/10 space-y-1">
+                    <p class="text-[9px] text-cyan-200/60 leading-relaxed">
+                        <i class="fas fa-bolt text-cyan-400/60 mr-1"></i>Potencia la quema de grasa y mejora tu rendimiento
+                    </p>
+                    <p class="text-[9px] text-cyan-200/40 leading-relaxed">
+                        <i class="fas fa-info-circle mr-1"></i>Complemento para potenciar resultados. Solo se vende junto con un plan.
+                    </p>
+                    <p class="text-[9px] text-cyan-200/40 leading-relaxed">
+                        <i class="fas fa-truck mr-1"></i>Entrega sin costo en Santa Ana y alrededores (máx. 2 km). Fuera de cobertura: envío por cotizar.
+                    </p>
+                </div>
+                <div id="lcarnitina-note-nutri" class="hidden mt-2 pt-2 border-t border-cyan-500/20">
+                    <p class="text-[10px] text-cyan-300">
+                        <i class="fas fa-check-circle mr-1"></i>L-Carnitina agregada · 1 frasco · $<span class="lcarnitina-amount-nutri">300</span> MXN
+                    </p>
+                </div>
+            </div>
+
             <!-- Botón Ver Video -->
             <button onclick="playVideo('nutri')" class="w-full mb-4 py-2 bg-gray-800/50 hover:bg-infit-pink/10 rounded text-xs text-infit-pink border border-infit-pink/30 transition-all flex items-center justify-center gap-2">
                 <i class="fas fa-play-circle text-sm"></i> Ver Preview
@@ -472,6 +547,38 @@
                 <span class="text-sm text-infit-gold font-bold">MXN / Mes</span>
                 <p class="text-[10px] text-gray-500 mt-1">Ahorras $150 vs. planes separados</p>
             </div>
+
+<!-- Toggle L-Carnitina - Combo Total -->
+            <div class="bg-cyan-900/20 border border-cyan-500/30 rounded-lg p-3 mb-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-flask text-cyan-400 text-sm"></i>
+                            <span class="text-white text-xs font-bold">Agregar L-Carnitina</span>
+                        </div>
+                        <p class="text-[10px] text-cyan-300/70 mt-1 ml-5">1 frasco · $<span id="lcarnitina-price-combo">300</span> MXN</p>
+                    </div>
+                    <div id="lcarnitina-toggle-combo" class="lcarnitina-toggle" onclick="toggleLcarnitina('combo')"></div>
+                </div>
+                <!-- Leyendas L-Carnitina -->
+                <div class="mt-2 pt-2 border-t border-cyan-500/10 space-y-1">
+                    <p class="text-[9px] text-cyan-200/60 leading-relaxed">
+                        <i class="fas fa-bolt text-cyan-400/60 mr-1"></i>Potencia la quema de grasa y mejora tu rendimiento
+                    </p>
+                    <p class="text-[9px] text-cyan-200/40 leading-relaxed">
+                        <i class="fas fa-info-circle mr-1"></i>Complemento para potenciar resultados. Solo se vende junto con un plan.
+                    </p>
+                    <p class="text-[9px] text-cyan-200/40 leading-relaxed">
+                        <i class="fas fa-truck mr-1"></i>Entrega sin costo en Santa Ana y alrededores (máx. 2 km). Fuera de cobertura: envío por cotizar.
+                    </p>
+                </div>
+                <div id="lcarnitina-note-combo" class="hidden mt-2 pt-2 border-t border-cyan-500/20">
+                    <p class="text-[10px] text-cyan-300">
+                        <i class="fas fa-check-circle mr-1"></i>L-Carnitina agregada · 1 frasco · $<span class="lcarnitina-amount-combo">300</span> MXN
+                    </p>
+                </div>
+            </div>
+
             <ul class="space-y-4 text-sm text-gray-300 mb-8">
                 <li class="flex flex-col gap-1">
                     <div class="flex items-start gap-3">
@@ -510,6 +617,38 @@
                 <span class="text-3xl font-bold text-infit-gold price-tag">$<span id="display-price-train">400</span></span>
                 <span class="text-sm text-gray-500 uppercase">MXN / Mes</span>
             </div>
+
+<!-- Toggle L-Carnitina - Entrenamiento -->
+            <div class="bg-cyan-900/20 border border-cyan-500/30 rounded-lg p-3 mb-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-flask text-cyan-400 text-sm"></i>
+                            <span class="text-white text-xs font-bold">Agregar L-Carnitina</span>
+                        </div>
+                        <p class="text-[10px] text-cyan-300/70 mt-1 ml-5">1 frasco · $<span id="lcarnitina-price-train">300</span> MXN</p>
+                    </div>
+                    <div id="lcarnitina-toggle-train" class="lcarnitina-toggle" onclick="toggleLcarnitina('train')"></div>
+                </div>
+                <!-- Leyendas L-Carnitina -->
+                <div class="mt-2 pt-2 border-t border-cyan-500/10 space-y-1">
+                    <p class="text-[9px] text-cyan-200/60 leading-relaxed">
+                        <i class="fas fa-bolt text-cyan-400/60 mr-1"></i>Potencia la quema de grasa y mejora tu rendimiento
+                    </p>
+                    <p class="text-[9px] text-cyan-200/40 leading-relaxed">
+                        <i class="fas fa-info-circle mr-1"></i>Complemento para potenciar resultados. Solo se vende junto con un plan.
+                    </p>
+                    <p class="text-[9px] text-cyan-200/40 leading-relaxed">
+                        <i class="fas fa-truck mr-1"></i>Entrega sin costo en Santa Ana y alrededores (máx. 2 km). Fuera de cobertura: envío por cotizar.
+                    </p>
+                </div>
+                <div id="lcarnitina-note-train" class="hidden mt-2 pt-2 border-t border-cyan-500/20">
+                    <p class="text-[10px] text-cyan-300">
+                        <i class="fas fa-check-circle mr-1"></i>L-Carnitina agregada · 1 frasco · $<span class="lcarnitina-amount-train">300</span> MXN
+                    </p>
+                </div>
+            </div>
+
             <!-- Botón Ver Video -->
             <button onclick="playVideo('entreno')" class="w-full mb-4 py-2 bg-gray-800/50 hover:bg-infit-pink/10 rounded text-xs text-infit-pink border border-infit-pink/30 transition-all flex items-center justify-center gap-2">
                 <i class="fas fa-play-circle text-sm"></i> Ver Preview
@@ -653,7 +792,7 @@
                 </div>
 
                 <!-- Resumen Selección -->
-                <div class="bg-infit-pink/10 p-3 rounded border border-infit-pink/20 mb-6 flex justify-between items-center">
+                <div class="bg-infit-pink/10 p-3 rounded border border-infit-pink/20 mb-4 flex justify-between items-center">
                     <div>
                         <p class="text-[10px] text-infit-pink uppercase font-bold">Plan Seleccionado</p>
                         <p id="modal-plan-name" class="text-white font-bold text-lg leading-none">Combo Total</p>
@@ -661,6 +800,31 @@
                     <div class="text-right">
                         <p id="modal-plan-price" class="text-infit-gold font-bold text-xl">$550</p>
                         <p class="text-[9px] text-gray-500 uppercase">Mensual</p>
+                    </div>
+                </div>
+
+                <!-- Resumen L-Carnitina en Modal -->
+                <div id="modal-lcarnitina-summary" class="hidden bg-cyan-900/20 p-3 rounded border border-cyan-500/30 mb-4 flex justify-between items-center">
+                    <div>
+                        <p class="text-[10px] text-cyan-400 uppercase font-bold">
+                            <i class="fas fa-flask mr-1"></i>L-Carnitina
+                        </p>
+                        <p class="text-white font-bold text-sm">1 frasco</p>
+                    </div>
+                    <div class="text-right">
+                        <p id="modal-lcarnitina-price" class="text-cyan-400 font-bold text-lg">$300</p>
+                        <p class="text-[9px] text-gray-500 uppercase">Agregado</p>
+                    </div>
+                </div>
+
+                <!-- Total con L-Carnitina -->
+                <div id="modal-total-section" class="hidden bg-gradient-to-r from-infit-pink/10 to-cyan-900/10 p-3 rounded border border-infit-pink/30 mb-6 flex justify-between items-center">
+                    <div>
+                        <p class="text-[10px] text-white uppercase font-bold">Total Mensual</p>
+                        <p class="text-[9px] text-gray-500">Plan + L-Carnitina</p>
+                    </div>
+                    <div class="text-right">
+                        <p id="modal-total-price" class="text-white font-bold text-2xl">$850</p>
                     </div>
                 </div>
 
@@ -1010,17 +1174,76 @@
         //  1. CONFIGURACIÓN EDITABLE
         // ==========================================
         let config = {
-            promoText: "Promoción válida del 4 al 31 de mayo. Aprovecha el precio especial y los retos activos: invita a 1, 2 o 3 amig@s y comiencen juntos su mejor versión. Entre más se unan, mayor descuento obtienen.",
+            promoText: "Promoción válida del 01 al 30 de Junio. Aprovecha el precio especial y los retos activos: invita a 1, 2 o 3 amig@s y comiencen juntos su mejor versión. Entre más se unan, mayor descuento obtienen.",
             priceNutri: 199,
             priceTrain: 299,
             priceCombo: 399,
             priceOld: 700,
-            comboNote: "*La opción que genera mejores resultados estadísticamente.*"
+            comboNote: "*La opción que genera mejores resultados estadísticamente.*",
+            priceLcarnitina: 300,
+            lcarnitinaFrascos: 1
         };
         // ==========================================
 
         // ==========================================
-        //  2. LÓGICA DE FIREBASE Y NEGOCIO
+        //  2. ESTADO L-CARNITINA POR PLAN
+        // ==========================================
+        let lcarnitinaState = {
+            nutri: false,
+            train: false,
+            combo: false
+        };
+
+        function toggleLcarnitina(planId) {
+            lcarnitinaState[planId] = !lcarnitinaState[planId];
+            const toggle = document.getElementById(`lcarnitina-toggle-${planId}`);
+            const note = document.getElementById(`lcarnitina-note-${planId}`);
+
+            if (lcarnitinaState[planId]) {
+                toggle.classList.add('active');
+                note.classList.remove('hidden');
+            } else {
+                toggle.classList.remove('active');
+                note.classList.add('hidden');
+            }
+
+            // Actualizar modal si está abierto para ese plan
+            updateModalSummary();
+        }
+
+        function getSelectedPlanId(planName) {
+            if (planName === 'Nutrición') return 'nutri';
+            if (planName === 'Entrenamiento') return 'train';
+            if (planName === 'Combo Total') return 'combo';
+            return null;
+        }
+
+        function updateModalSummary() {
+            const planId = getSelectedPlanId(selectedPlan.name);
+            const hasLcarnitina = planId ? lcarnitinaState[planId] : false;
+            const lcarnitinaSummary = document.getElementById('modal-lcarnitina-summary');
+            const totalSection = document.getElementById('modal-total-section');
+
+            if (hasLcarnitina) {
+                const lcarnitinaPrice = config.priceLcarnitina;
+                const lcarnitinaFrascos = config.lcarnitinaFrascos;
+                const totalPrice = selectedPlan.price + lcarnitinaPrice;
+
+                document.getElementById('modal-lcarnitina-price').textContent = `$${lcarnitinaPrice}`;
+                lcarnitinaSummary.querySelector('.text-white.font-bold.text-sm').textContent = `${lcarnitinaFrascos} frasco${lcarnitinaFrascos > 1 ? 's' : ''}`;
+                lcarnitinaSummary.classList.remove('hidden');
+
+                document.getElementById('modal-total-price').textContent = `$${totalPrice}`;
+                totalSection.classList.remove('hidden');
+            } else {
+                lcarnitinaSummary.classList.add('hidden');
+                totalSection.classList.add('hidden');
+            }
+        }
+        // ==========================================
+
+        // ==========================================
+        //  3. LÓGICA DE FIREBASE Y NEGOCIO
         // ==========================================
         
         let db;
@@ -1189,11 +1412,21 @@
             document.getElementById('display-price-old').textContent = config.priceOld;
             document.getElementById('display-combo-note').textContent = config.comboNote;
 
+            // Actualizar precios L-Carnitina en las tarjetas
+            document.getElementById('lcarnitina-price-nutri').textContent = config.priceLcarnitina;
+            document.getElementById('lcarnitina-price-combo').textContent = config.priceLcarnitina;
+            document.getElementById('lcarnitina-price-train').textContent = config.priceLcarnitina;
+            document.querySelectorAll('.lcarnitina-amount-nutri').forEach(el => el.textContent = config.priceLcarnitina);
+            document.querySelectorAll('.lcarnitina-amount-combo').forEach(el => el.textContent = config.priceLcarnitina);
+            document.querySelectorAll('.lcarnitina-amount-train').forEach(el => el.textContent = config.priceLcarnitina);
+
             document.getElementById('edit-promo').value = config.promoText;
             document.getElementById('edit-price-nutri').value = config.priceNutri;
             document.getElementById('edit-price-train').value = config.priceTrain;
             document.getElementById('edit-price-combo').value = config.priceCombo;
             document.getElementById('edit-price-old').value = config.priceOld;
+            document.getElementById('edit-price-lcarnitina').value = config.priceLcarnitina;
+            document.getElementById('edit-lcarnitina-frascos').value = config.lcarnitinaFrascos;
             document.getElementById('edit-combo-note').value = config.comboNote;
         }
 
@@ -1203,6 +1436,8 @@
             config.priceTrain = document.getElementById('edit-price-train').value;
             config.priceCombo = document.getElementById('edit-price-combo').value;
             config.priceOld = document.getElementById('edit-price-old').value;
+            config.priceLcarnitina = parseInt(document.getElementById('edit-price-lcarnitina').value) || 300;
+            config.lcarnitinaFrascos = parseInt(document.getElementById('edit-lcarnitina-frascos').value) || 1;
             config.comboNote = document.getElementById('edit-combo-note').value;
             loadConfig();
         }
@@ -1218,7 +1453,9 @@
     priceTrain: ${config.priceTrain},
     priceCombo: ${config.priceCombo},
     priceOld: ${config.priceOld},
-    comboNote: "${config.comboNote.replace(/\n/g, '')}"
+    comboNote: "${config.comboNote.replace(/\n/g, '')}",
+    priceLcarnitina: ${config.priceLcarnitina},
+    lcarnitinaFrascos: ${config.lcarnitinaFrascos}
 };`;
             
             navigator.clipboard.writeText(code).then(() => {
@@ -1250,7 +1487,7 @@
             cuisineUniversalOption.style.display = 'block';
             
             if (planName === 'Nutrición') {
-                price = config.priceNutri;
+                price = parseInt(config.priceNutri);
                 fieldsNutri.classList.remove('hidden');
                 fieldsCuisine.classList.remove('hidden');
                 fieldsExclude.classList.remove('hidden');
@@ -1258,12 +1495,12 @@
                 // Ya están visibles por defecto
                 
             } else if (planName === 'Entrenamiento') {
-                price = config.priceTrain;
+                price = parseInt(config.priceTrain);
                 fieldsTrain.classList.remove('hidden');
                 // Para Entrenamiento: no mostrar opciones de cocina
                 
             } else if (planName === 'Combo Total') {
-                price = config.priceCombo;
+                price = parseInt(config.priceCombo);
                 fieldsNutri.classList.remove('hidden');
                 fieldsTrain.classList.remove('hidden');
                 fieldsCuisine.classList.remove('hidden');
@@ -1285,6 +1522,9 @@
             document.getElementById('modal-plan-name').textContent = planName;
             document.getElementById('modal-plan-price').textContent = `$${price}`;
             
+            // Actualizar resumen de L-Carnitina en modal
+            updateModalSummary();
+
             resetStepIndicators();
             
             const modal = document.getElementById('order-modal');
@@ -1306,11 +1546,24 @@
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
 
+            const planId = getSelectedPlanId(selectedPlan.name);
+            const hasLcarnitina = planId ? lcarnitinaState[planId] : false;
+            const lcarnitinaPrice = hasLcarnitina ? config.priceLcarnitina : 0;
+            const lcarnitinaFrascos = hasLcarnitina ? config.lcarnitinaFrascos : 0;
+            const totalPrice = selectedPlan.price + lcarnitinaPrice;
+
             const formData = {
                 name: document.getElementById('client-name').value,
                 city: document.getElementById('client-city').value,
                 plan: selectedPlan.name,
                 price: selectedPlan.price,
+                gender: 'F',
+                region: 'MX',
+                currency: 'MXN',
+                lcarnitina: hasLcarnitina,
+                lcarnitinaFrascos: lcarnitinaFrascos,
+                lcarnitinaPrice: lcarnitinaPrice,
+                totalPrice: totalPrice,
                 affiliate: affiliateCode || 'Orgánico',
                 timestamp: new Date().toISOString()
             };
@@ -1373,6 +1626,12 @@
                 detailsText += `%0A%0A🏋️ *DATOS ENTRENO*%0A• Lugar: ${place}%0A• Días Disp: ${days || 'Por definir'}`;
             }
 
+            // Detalle de L-Carnitina en WhatsApp
+            let lcarnitinaText = '';
+            if (hasLcarnitina) {
+                lcarnitinaText = `%0A%0A💊 *L-CARNITINA AGREGADA*%0A• ${lcarnitinaFrascos} frasco${lcarnitinaFrascos > 1 ? 's' : ''}%0A• Precio: $${lcarnitinaPrice} MXN`;
+            }
+
             if (db) {
                 try {
                     const user = auth.currentUser;
@@ -1385,12 +1644,13 @@
             }
 
             const phone = "527751056744";
-            const header = `Hola INFIT! 🚀 Soy *${formData.name}* de ${formData.city}.%0A%0A🔥 Quiero empezar mi *${formData.plan}* ($${formData.price} MXN / Mes).`;
+            const header = `Hola INFIT! 🚀 Soy *${formData.name}* de ${formData.city}.%0A%0A🔥 Quiero empezar mi *${formData.plan}* ($${formData.price} MXN / Mes).${lcarnitinaText}`;
+            const totalText = hasLcarnitina ? `%0A%0A💰 *TOTAL: $${totalPrice} MXN / Mes* (Plan + L-Carnitina)` : '';
             const footer = `%0A%0A📝 *Nota:* Estoy de acuerdo en realizar el pago al momento de tener todo mi material.`;
             const motivation = `%0A%0A✨ *¡Bienvenida a tu mejor Versión!*`;
             const refText = affiliateCode ? `%0A%0A(Asesor: ${affiliateCode})` : '';
             
-            const fullText = `${header}${detailsText}${footer}${motivation}${refText}`;
+            const fullText = `${header}${totalText}${detailsText}${footer}${motivation}${refText}`;
             const waLink = `https://wa.me/${phone}?text=${fullText}`;
 
             window.open(waLink, '_blank');
